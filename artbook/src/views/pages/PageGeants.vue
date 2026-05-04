@@ -34,7 +34,7 @@ const activeImage = computed<ImageVersion>(() => imageVersions[imageIndex.value]
     <ImageVersionMenu
       :versions="imageVersions"
       :active-index="imageIndex"
-      aria-label="Versions de l'illustration Les Geants"
+      aria-label="Versions de l'illustration Les Géants"
       @select="imageIndex = $event"
     />
   </article>

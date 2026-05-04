@@ -24,14 +24,14 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
     pageImage: '/images/pages/geants.jpg',
     nextPageId: 'magie',
   },
-  {
-    id: 'magie',
-    name: 'Magie',
-    category: 'Monde',
-    routePath: '/pages/magie',
-    pageImage: '/images/pages/magie.jpg',
-    nextPageId: 'flou',
-  },
+  // {
+  //   id: 'magie',
+  //   name: 'Magie',
+  //   category: 'Monde',
+  //   routePath: '/pages/magie',
+  //   pageImage: '/images/pages/magie.jpg',
+  //   nextPageId: 'flou',
+  // },
   {
     id: 'flou',
     name: 'Flou',

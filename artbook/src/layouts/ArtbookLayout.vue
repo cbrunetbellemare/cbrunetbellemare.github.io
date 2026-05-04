@@ -93,6 +93,7 @@ function resetZoom() {
 }
 
 .artbook-page {
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   margin: 0 auto;
