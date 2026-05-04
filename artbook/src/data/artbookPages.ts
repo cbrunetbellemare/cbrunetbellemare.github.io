@@ -14,6 +14,14 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
     category: ' ',
     routePath: '/pages/foreword',
     pageImage: '/images/pages/preface.jpg',
+    nextPageId: 'geants',
+  },
+  {
+    id: 'geants',
+    name: 'Les Géants',
+    category: 'Monde',
+    routePath: '/pages/geants',
+    pageImage: '/images/pages/geants.jpg',
     nextPageId: 'magie',
   },
   {

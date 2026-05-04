@@ -1,5 +1,6 @@
 import type { Component } from 'vue'
 import PageFlou from '../views/pages/PageFlou.vue'
+import PageGeants from '../views/pages/PageGeants.vue'
 import PageMagie from '../views/pages/PageMagie.vue'
 import PagePreface from '../views/pages/PagePreface.vue'
 import { artbookPages, firstArtbookPage, type ArtbookPage } from '../data/artbookPages'
@@ -12,6 +13,7 @@ interface ArtbookRoute {
 
 const pageComponents: Record<string, Component> = {
   preface: PagePreface,
+  geants: PageGeants,
   magie: PageMagie,
   flou: PageFlou,
 }
