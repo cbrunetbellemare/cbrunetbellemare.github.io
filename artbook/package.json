@@ -15,7 +15,10 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
-    "vue": "^3.5.32"
+    "@jamescoyle/vue-icon": "^0.1.2",
+    "@mdi/js": "^7.4.47",
+    "vue": "^3.5.32",
+    "vue-zoomable": "^1.2.8"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",

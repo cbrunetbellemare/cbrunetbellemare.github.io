@@ -1,6 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Amarante&display=swap');
 @import './base.css';
 
+:root {
+  --artbook-gold: #f4d98b;
+  --artbook-gold-bright: #f1dc9a;
+  --artbook-gold-progress: #f2c96b;
+  --artbook-text-warm: #f4e8c3;
+  --artbook-gold-rgb: 218, 187, 105;
+  --artbook-gold-bright-rgb: 244, 217, 139;
+  --artbook-radius-sm: 2px;
+  --artbook-label-size: clamp(0.66rem, 0.92vh, 0.94rem);
+  --artbook-control-gap: clamp(5px, 0.58vh, 10px);
+  --artbook-panel-padding-sm: clamp(4px, 0.58vh, 10px);
+  --artbook-menu-button-padding: clamp(5px, 0.58vh, 10px) clamp(7px, 0.9vh, 14px);
+  --artbook-menu-icon-size: clamp(15px, 1.65vh, 26px);
+  --artbook-panel-bg: linear-gradient(180deg, rgba(25, 24, 32, 0.84), rgba(7, 7, 12, 0.88));
+  --artbook-menu-item-bg: rgba(9, 9, 14, 0.72);
+  --artbook-menu-item-bg-hover: rgba(var(--artbook-gold-rgb), 0.22);
+  --artbook-menu-item-bg-active: rgba(var(--artbook-gold-rgb), 0.28);
+  --artbook-panel-shadow:
+    0 14px 42px rgba(0, 0, 0, 0.46),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --artbook-active-glow: 0 0 18px rgba(var(--artbook-gold-rgb), 0.45);
+}
+
 body {
   background: #000000;
 }
@@ -18,4 +41,67 @@ button {
 
 #app {
   min-height: 100vh;
+}
+
+.artbook-panel {
+  border: 1px solid rgba(var(--artbook-gold-rgb), var(--artbook-panel-border-opacity, 0.46));
+  border-radius: var(--artbook-panel-radius, 0);
+  background: var(--artbook-panel-background, var(--artbook-panel-bg));
+  box-shadow: var(--artbook-panel-box-shadow, var(--artbook-panel-shadow));
+}
+
+.artbook-menu-button {
+  --artbook-hover-base-bg: var(--artbook-menu-item-bg);
+
+  border: 1px solid rgba(var(--artbook-gold-rgb), var(--artbook-menu-button-border-opacity, 0.42));
+  background: var(--artbook-hover-base-bg);
+  color: var(--artbook-text-warm);
+  cursor: pointer;
+  font: inherit;
+}
+
+.artbook-menu-button[aria-current='step'] {
+  --artbook-hover-base-bg: var(--artbook-menu-item-bg-active);
+
+  border-color: rgba(var(--artbook-gold-bright-rgb), 0.96);
+  background: var(--artbook-hover-base-bg);
+  box-shadow: var(--artbook-active-glow);
+}
+
+.artbook-hover-highlight {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.artbook-hover-highlight::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--artbook-menu-item-bg-hover);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+}
+
+.artbook-hover-highlight:not(:disabled):hover::before,
+.artbook-hover-highlight:not(:disabled):focus-visible::before {
+  opacity: 1;
+}
+
+.artbook-hover-highlight:not(:disabled):hover,
+.artbook-hover-highlight:not(:disabled):focus-visible {
+  outline: none;
+}
+
+.artbook-ui-label {
+  color: var(--artbook-text-warm);
+  font-size: var(--artbook-label-size);
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.artbook-menu-svg {
+  width: var(--artbook-menu-icon-size);
+  height: var(--artbook-menu-icon-size);
 }

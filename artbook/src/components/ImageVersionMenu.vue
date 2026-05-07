@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import SvgIcon from '@jamescoyle/vue-icon'
+import { Icons } from '../icons'
+
 export interface ImageVersion {
   label: string
   image: string
@@ -16,20 +19,30 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <Teleport to="body">
-    <div class="image-version-menu" :aria-label="ariaLabel ?? 'Versions de l illustration'">
+  <Teleport defer to="#artbook-version-controls">
+    <div
+      class="image-version-menu artbook-panel"
+      :aria-label="ariaLabel ?? 'Versions de l illustration'"
+    >
       <div class="version-list">
         <button
           v-for="(version, index) in versions"
           :key="version.label"
-          class="version-button"
+          class="version-button artbook-menu-button artbook-hover-highlight"
           type="button"
           :aria-label="`Afficher ${version.label}`"
           :aria-current="index === activeIndex ? 'step' : undefined"
           @click="$emit('select', index)"
         >
-          <span class="version-marker"></span>
-          <span class="version-label">{{ version.label }}</span>
+          <span class="version-marker" aria-hidden="true">
+            <SvgIcon
+              type="mdi"
+              :path="index === activeIndex ? Icons.StarFourPointsBox : Icons.StarFourPointsBoxOutline"
+              class="artbook-menu-svg"
+              :size="18"
+            />
+          </span>
+          <span class="version-label artbook-ui-label">{{ version.label }}</span>
         </button>
       </div>
     </div>
@@ -38,83 +51,50 @@ const emit = defineEmits<{
 
 <style scoped>
 .image-version-menu {
-  position: fixed;
-  right: clamp(14px, 2.5vw, 32px);
-  top: 50%;
-  z-index: 12;
   display: grid;
   align-items: center;
-  gap: 10px;
-  width: 122px;
-  border: 1px solid rgba(218, 187, 105, 0.46);
-  background:
-    linear-gradient(180deg, rgba(25, 24, 32, 0.84), rgba(7, 7, 12, 0.88));
-  padding: 12px;
-  transform: translateY(-50%);
-  box-shadow:
-    0 14px 42px rgba(0, 0, 0, 0.46),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
-}
-
-.version-button {
-  color: #f4d98b;
-  cursor: pointer;
-  font: inherit;
+  gap: clamp(8px, 0.9vh, 12px);
+  width: fit-content;
+  max-width: min(48vw, clamp(330px, 34vh, 560px));
+  padding: var(--artbook-panel-padding-sm);
 }
 
 .version-list {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 0.7vh, 10px);
 }
 
 .version-button {
   display: flex;
   align-items: center;
-  gap: 9px;
-  width: 100%;
-  border: 1px solid rgba(218, 187, 105, 0.42);
-  background: rgba(9, 9, 14, 0.72);
-  padding: 8px 9px;
+  justify-content: center;
+  gap: var(--artbook-control-gap);
+  padding: var(--artbook-menu-button-padding);
 }
 
 .version-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
-  width: 11px;
-  height: 11px;
-  border: 1px solid rgba(244, 217, 139, 0.72);
-  background: rgba(218, 187, 105, 0.18);
-  transform: rotate(45deg);
-}
-
-.version-button[aria-current='step'] {
-  border-color: rgba(244, 217, 139, 0.96);
-  background: rgba(218, 187, 105, 0.28);
-  box-shadow: 0 0 18px rgba(218, 187, 105, 0.45);
+  width: var(--artbook-menu-icon-size);
+  height: var(--artbook-menu-icon-size);
+  color: rgba(var(--artbook-gold-bright-rgb), 0.78);
 }
 
 .version-button[aria-current='step'] .version-marker {
-  background: #f4d98b;
-}
-
-.version-label {
-  color: #f4e8c3;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.version-button:hover,
-.version-button:focus-visible {
-  background: rgba(218, 187, 105, 0.2);
-  outline: none;
+  color: var(--artbook-gold);
 }
 
 @media (max-width: 900px) {
   .image-version-menu {
-    right: 10px;
-    width: 104px;
-    padding: 9px;
+    max-width: 42vw;
+    overflow-x: auto;
+  }
+
+  .version-button {
+    padding: var(--artbook-menu-button-padding);
   }
 }
 </style>
