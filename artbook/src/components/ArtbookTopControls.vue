@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import type { ArtbookPage } from '../data/artbookPages'
 import { useMusicPlayer } from '../composables/useMusicPlayer'
 import { Icons } from '../icons'
+import ArtbookLexiconModal from './ArtbookLexiconModal.vue'
+import ArtbookMapModal from './ArtbookMapModal.vue'
 import PagesMenu from './PagesMenu.vue'
 
 defineProps<{
@@ -11,25 +13,46 @@ defineProps<{
   isPagesMenuOpen: boolean
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   togglePagesMenu: []
   closePagesMenu: []
 }>()
 
 const { isMuted, initializeMusic, toggleMute } = useMusicPlayer()
 
+// Chaque modale possède son propre état pour éviter qu'elles s'ouvrent toutes en même temps.
+const isMapOpen = ref(false)
+const isLexiconOpen = ref(false)
 const musicIconPath = computed(() => (isMuted.value ? Icons.MusicOff : Icons.MusicOn))
 const musicButtonLabel = computed(() => (isMuted.value ? 'Activer la musique' : 'Couper la musique'))
 
 onMounted(() => {
   initializeMusic()
 })
+
+function openMap() {
+  // On ferme d'abord les autres panneaux pour garder une seule modale active.
+  emit('closePagesMenu')
+  isLexiconOpen.value = false
+  isMapOpen.value = true
+}
+
+function openLexicon() {
+  // Le lexique est une modale globale; on ferme donc les autres panneaux avant de l'afficher.
+  emit('closePagesMenu')
+  isMapOpen.value = false
+  isLexiconOpen.value = true
+}
 </script>
 
 <template>
   <header class="top-controls">
-    <p class="wordmark" aria-label="Firaluna">Firaluna</p>
+    <!-- Logo principal de l'artbook, remplacé par une image pour respecter l'identité visuelle du projet. -->
+    <div class="brand-mark">
+      <img class="brand-logo" src="/images/logo.png" alt="Firaluna" />
+    </div>
 
+    <!-- Point d'ancrage où les menus d'étapes et les instructions vidéo sont téléportés. -->
     <div id="artbook-version-controls" class="version-controls-target"></div>
 
     <nav class="actions" aria-label="Artbook controls">
@@ -42,6 +65,26 @@ onMounted(() => {
         @click="toggleMute"
       >
         <SvgIcon class="music-icon" type="mdi" :path="musicIconPath" :size="20" aria-hidden="true" />
+      </button>
+
+      <button
+        class="control-button map-control-button artbook-hover-highlight"
+        type="button"
+        aria-haspopup="dialog"
+        :aria-expanded="isMapOpen"
+        @click="openMap"
+      >
+        Carte
+      </button>
+
+      <button
+        class="control-button lexicon-control-button artbook-hover-highlight"
+        type="button"
+        aria-haspopup="dialog"
+        :aria-expanded="isLexiconOpen"
+        @click="openLexicon"
+      >
+        Lexique
       </button>
 
       <div class="pages-menu-wrapper">
@@ -63,6 +106,9 @@ onMounted(() => {
         />
       </div>
     </nav>
+
+    <ArtbookMapModal v-if="isMapOpen" :page="currentPage" @close="isMapOpen = false" />
+    <ArtbookLexiconModal v-if="isLexiconOpen" @close="isLexiconOpen = false" />
   </header>
 </template>
 
@@ -76,17 +122,20 @@ onMounted(() => {
   margin: 0 auto clamp(8px, 1vh, 14px);
 }
 
-.wordmark {
+.brand-mark {
   justify-self: start;
-  color: var(--artbook-gold);
-  font-family: 'Amarante', Georgia, 'Palatino Linotype', 'Book Antiqua', serif;
-  font-size: clamp(2rem, 4.4vh, 4.4rem);
-  font-weight: 400;
-  line-height: 0.95;
-  text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.2),
-    0 3px 0 rgba(20, 14, 28, 0.9),
-    0 0 22px rgba(226, 193, 105, 0.36);
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.brand-logo {
+  display: block;
+  width: auto;
+  height: clamp(38px, 5.2vh, 82px);
+  max-width: min(32vw, 280px);
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
 }
 
 .pages-menu-wrapper {
@@ -139,8 +188,13 @@ onMounted(() => {
   padding-inline: clamp(8px, 0.9vh, 14px);
 }
 
-.pages-control-button {
+.pages-control-button,
+.map-control-button {
   min-width: clamp(72px, 6.8vh, 118px);
+}
+
+.lexicon-control-button {
+  min-width: clamp(86px, 8.2vh, 132px);
 }
 
 .icon-control-button :deep(svg) {
@@ -151,5 +205,4 @@ onMounted(() => {
   width: 1em;
   height: 1em;
 }
-
 </style>

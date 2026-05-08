@@ -15,6 +15,7 @@ const isStartingVideo = ref(false)
 const resetArtbookZoom = useArtbookZoomReset()
 
 async function startVideo() {
+  // La préface commence par l'image; la vidéo se lance seulement quand l'utilisateur le demande.
   if (hasStartedVideo.value || isStartingVideo.value) {
     return
   }
@@ -27,6 +28,7 @@ async function startVideo() {
 </script>
 
 <template>
+  <!-- Après le premier lancement, la page utilise le lecteur vidéo complet. -->
   <ArtbookVideoPage
     v-if="hasStartedVideo"
     :image="page.pageImage"
@@ -37,6 +39,7 @@ async function startVideo() {
   />
 
   <template v-else>
+    <!-- État initial: illustration fixe avec un bouton "Voir la vidéo" dans les contrôles. -->
     <ArtbookImagePage :image="page.pageImage" :name="page.name" />
     <VideoReplayMenu @replay="startVideo" />
   </template>

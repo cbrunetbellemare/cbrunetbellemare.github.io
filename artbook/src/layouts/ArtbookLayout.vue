@@ -21,6 +21,7 @@ const props = defineProps<{
 const { navigateTo } = useSimpleRouter()
 provide(artbookZoomResetKey, resetZoomFromChild)
 
+// Paramètres centraux du zoom; ils gardent l'interaction cohérente sur toutes les pages.
 const minZoomLevel = 1
 const maxZoomLevel = 2.6
 const zoomStep = 0.12
@@ -47,6 +48,7 @@ const nextPage = computed(() =>
 watch(
   () => props.page.id,
   () => {
+    // On remet toujours le zoom à zéro lorsqu'on change de page.
     resetZoom()
   },
 )
@@ -89,6 +91,7 @@ async function resetZoomFromChild(options?: { smooth?: boolean }) {
 }
 
 function resetZoomSmooth() {
+  // Certains contenus, comme les vidéos, demandent un retour fluide avant d'afficher leur interface.
   cancelSmoothReset()
 
   const startZoom = zoomLevel.value
@@ -143,6 +146,7 @@ function cancelSmoothReset() {
 }
 
 function constrainZoomPan() {
+  // Empêche l'utilisateur de déplacer une page zoomée au-delà de ses limites visibles.
   const constrainedPan = getConstrainedPan(zoomPan.value)
 
   if (constrainedPan.x !== zoomPan.value.x || constrainedPan.y !== zoomPan.value.y) {
@@ -212,6 +216,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
 <template>
   <main class="artbook-shell">
     <div class="artbook-stage">
+      <!-- Barre supérieure commune: logo, musique, carte, lexique et menu des pages. -->
       <ArtbookTopControls
         :current-page="page"
         :is-pages-menu-open="isPagesMenuOpen"
@@ -242,6 +247,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
           :class="{ 'artbook-page--zoomed': isZoomed }"
           :aria-label="`${page.name} artbook page`"
         >
+          <!-- VueZoomable fournit le zoom et le déplacement de l'illustration sans modifier les pages elles-mêmes. -->
           <VueZoomable
             v-model:zoom="zoomLevel"
             v-model:pan="zoomPan"

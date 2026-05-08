@@ -1,17 +1,41 @@
 <script setup lang="ts">
-defineEmits<{
+const props = withDefaults(
+  defineProps<{
+    // Texte affiché dans la barre du haut selon le mode vidéo utilisé.
+    instruction?: string
+    // Désactivé pour le mode hover, où la molette ne contrôle pas la vidéo.
+    wheelEnabled?: boolean
+  }>(),
+  {
+    instruction: 'Utilise la molette de la souris pour avancer et reculer la vidéo',
+    wheelEnabled: true,
+  },
+)
+
+const emit = defineEmits<{
   scrub: [event: WheelEvent]
 }>()
+
+function scrubWithWheel(event: WheelEvent) {
+  if (!props.wheelEnabled) {
+    return
+  }
+
+  // Le menu peut lui-même recevoir la molette; on transmet donc l'événement au lecteur vidéo.
+  event.preventDefault()
+  event.stopPropagation()
+  emit('scrub', event)
+}
 </script>
 
 <template>
   <Teleport defer to="#artbook-version-controls">
     <div
       class="video-scrub-menu artbook-panel"
-      @wheel.prevent.stop="$emit('scrub', $event)"
+      @wheel="scrubWithWheel"
     >
       <p class="video-instruction artbook-ui-label">
-        Utilise la molette de la souris pour avancer et reculer la vid&eacute;o
+        {{ instruction }}
       </p>
     </div>
   </Teleport>

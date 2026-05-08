@@ -8,6 +8,7 @@ defineEmits<{
 </script>
 
 <template>
+  <!-- Bouton réutilisé pour ouvrir ou relancer une vidéo depuis la zone de contrôle supérieure. -->
   <Teleport defer to="#artbook-version-controls">
     <div class="video-replay-menu artbook-panel">
       <button

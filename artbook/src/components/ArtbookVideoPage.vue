@@ -6,30 +6,43 @@ import { Icons } from '../icons'
 import VideoReplayMenu from './VideoReplayMenu.vue'
 import VideoScrubMenu from './VideoScrubMenu.vue'
 
+type VideoControlMode = 'wheel' | 'hover'
+
 const props = withDefaults(
   defineProps<{
     image: string
     name: string
     videoSrc: string
+    videoControlMode?: VideoControlMode
     closeButtonRight?: string
     closeButtonTop?: string
   }>(),
   {
+    videoControlMode: 'wheel',
     closeButtonRight: 'clamp(10px, 1.1vh, 16px)',
     closeButtonTop: 'clamp(10px, 1.1vh, 16px)',
   },
 )
 
-const hasVideoEnded = ref(false)
+// L'état "fermé" dépend uniquement du bouton X; la vidéo ne disparaît pas quand elle atteint la fin.
+const isVideoClosed = ref(false)
 const videoElement = ref<HTMLVideoElement | null>(null)
 const currentTime = ref(0)
 const duration = ref(0)
 const videoAspectRatio = ref('4 / 5')
 const resetArtbookZoom = useArtbookZoomReset()
 const isReplayingVideo = ref(false)
+const isHoverControlMode = computed(() => props.videoControlMode === 'hover')
 
+// La barre de progression reste synchronisée avec currentTime, peu importe le mode de contrôle choisi.
 const progressPercent = computed(() => {
   return duration.value > 0 ? (currentTime.value / duration.value) * 100 : 0
+})
+
+const videoInstruction = computed(() => {
+  return isHoverControlMode.value
+    ? 'Survole la vidéo de gauche à droite pour avancer ou reculer'
+    : 'Utilise la molette de la souris pour avancer et reculer la vidéo'
 })
 
 const closeButtonStyle = computed(() => {
@@ -44,20 +57,51 @@ onMounted(() => {
 })
 
 function scrubVideo(event: WheelEvent) {
-  if (hasVideoEnded.value || !videoElement.value || !Number.isFinite(videoElement.value.duration)) {
+  // Mode classique: la molette avance ou recule la vidéo.
+  if (
+    isHoverControlMode.value ||
+    isVideoClosed.value ||
+    !videoElement.value ||
+    !Number.isFinite(videoElement.value.duration)
+  ) {
     return
   }
 
   event.preventDefault()
 
   const scrubSpeed = 0.004
-  const nextTime = videoElement.value.currentTime - event.deltaY * scrubSpeed
-  videoElement.value.currentTime = Math.min(Math.max(nextTime, 0), videoElement.value.duration)
+  setVideoTime(videoElement.value.currentTime - event.deltaY * scrubSpeed)
+}
+
+function scrubVideoWithHover(event: MouseEvent) {
+  // Mode alternatif: la position horizontale de la souris devient la position dans la vidéo.
+  if (
+    !isHoverControlMode.value ||
+    isVideoClosed.value ||
+    !videoElement.value ||
+    !Number.isFinite(videoElement.value.duration)
+  ) {
+    return
+  }
+
+  const videoFrame = event.currentTarget as HTMLElement
+  const bounds = videoFrame.getBoundingClientRect()
+  const pointerProgress = clamp((event.clientX - bounds.left) / bounds.width, 0, 1)
+
+  // Le survol contrôle directement la position dans la vidéo:
+  // à gauche on recule, à droite on avance, sans devoir cliquer.
+  setVideoTime(videoElement.value.duration * pointerProgress)
+}
+
+function setVideoTime(nextTime: number) {
+  if (!videoElement.value || !Number.isFinite(videoElement.value.duration)) {
+    return 0
+  }
+
+  videoElement.value.currentTime = clamp(nextTime, 0, videoElement.value.duration)
   currentTime.value = videoElement.value.currentTime
 
-  if (videoElement.value.currentTime >= videoElement.value.duration - 0.05) {
-    hasVideoEnded.value = true
-  }
+  return currentTime.value
 }
 
 function updateVideoMetadata() {
@@ -66,6 +110,7 @@ function updateVideoMetadata() {
   }
 
   if (videoElement.value.videoWidth > 0 && videoElement.value.videoHeight > 0) {
+    // On adapte le conteneur au vrai format de la vidéo pour éviter les déformations.
     videoAspectRatio.value = `${videoElement.value.videoWidth} / ${videoElement.value.videoHeight}`
   }
 
@@ -80,23 +125,32 @@ async function replayVideo() {
 
   isReplayingVideo.value = true
   await resetArtbookZoom?.({ smooth: true })
-  hasVideoEnded.value = false
+  isVideoClosed.value = false
   currentTime.value = 0
   isReplayingVideo.value = false
 }
 
 function closeVideo() {
-  hasVideoEnded.value = true
+  // La vidéo reste visible quand elle arrive à la fin; seul le bouton X ferme le lecteur.
+  isVideoClosed.value = true
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
 }
 </script>
 
 <template>
-  <article class="artbook-video-page" :data-video-ended="hasVideoEnded">
+  <article class="artbook-video-page" :data-video-closed="isVideoClosed">
     <img class="page-image" :src="image" :alt="name" />
 
-    <div v-if="!hasVideoEnded" class="video-layer" @wheel.stop="scrubVideo">
+    <div v-if="!isVideoClosed" class="video-layer" @wheel.stop="scrubVideo">
       <div class="video-shell" :style="{ aspectRatio: videoAspectRatio }">
-        <div class="video-frame">
+        <div
+          class="video-frame"
+          :class="{ 'video-frame--hover-scrub': isHoverControlMode }"
+          @mousemove="scrubVideoWithHover"
+        >
           <video
             ref="videoElement"
             class="intro-video"
@@ -106,7 +160,7 @@ function closeVideo() {
             preload="auto"
             @loadedmetadata="updateVideoMetadata"
             @timeupdate="updateVideoMetadata"
-            @ended="hasVideoEnded = true"
+            @ended="updateVideoMetadata"
           />
 
           <button
@@ -129,7 +183,12 @@ function closeVideo() {
       </div>
     </div>
 
-    <VideoScrubMenu v-if="!hasVideoEnded" @scrub="scrubVideo" />
+    <VideoScrubMenu
+      v-if="!isVideoClosed"
+      :instruction="videoInstruction"
+      :wheel-enabled="!isHoverControlMode"
+      @scrub="scrubVideo"
+    />
 
     <VideoReplayMenu v-else @replay="replayVideo" />
   </article>
@@ -154,7 +213,7 @@ function closeVideo() {
     transform 700ms ease;
 }
 
-.artbook-video-page:not([data-video-ended='true']) .page-image {
+.artbook-video-page:not([data-video-closed='true']) .page-image {
   filter: blur(16px);
   transform: scale(1.04);
 }
@@ -183,6 +242,10 @@ function closeVideo() {
   min-height: 0;
   overflow: hidden;
   background: transparent;
+}
+
+.video-frame--hover-scrub {
+  cursor: ew-resize;
 }
 
 .intro-video {

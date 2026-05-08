@@ -3,22 +3,25 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { Icons } from '../icons'
 
 export interface ImageVersion {
+  // Texte affiché dans le contrôle d'étapes.
   label: string
+  // Image correspondant à cette étape du processus.
   image: string
 }
 
-const props = defineProps<{
+defineProps<{
   versions: readonly ImageVersion[]
   activeIndex: number
   ariaLabel?: string
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   select: [index: number]
 }>()
 </script>
 
 <template>
+  <!-- Menu historique: chaque bouton représente une étape fixe de l'illustration. -->
   <Teleport defer to="#artbook-version-controls">
     <div
       class="image-version-menu artbook-panel"

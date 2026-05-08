@@ -8,5 +8,6 @@ defineProps<{
 </script>
 
 <template>
+  <!-- Le Flou conserve le contrôle vidéo classique par molette. -->
   <ArtbookVideoPage :image="page.pageImage" :name="page.name" video-src="/videos/flouVideo.mp4" />
 </template>
