@@ -1,6 +1,7 @@
 import { readonly, ref } from 'vue'
+import { publicAsset } from '../utils/publicPath'
 
-const musicSource = '/musique/musique.mp3'
+const musicSource = publicAsset('musique/musique.mp3')
 const mutedStorageKey = 'artbook.musicMuted'
 
 const isMuted = ref(readStoredMutedState())

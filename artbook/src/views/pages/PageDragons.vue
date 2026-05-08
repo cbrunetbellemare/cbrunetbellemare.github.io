@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import ArtbookVideoPage from '../../components/ArtbookVideoPage.vue'
 import type { ArtbookPage } from '../../data/artbookPages'
+import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
 }>()
+
+const dragonsVideo = publicAsset('videos/dragonsVideo.mp4')
 </script>
 
 <template>
@@ -12,7 +15,7 @@ defineProps<{
   <ArtbookVideoPage
     :image="page.pageImage"
     :name="page.name"
-    video-src="/videos/dragonsVideo.mp4"
+    :video-src="dragonsVideo"
     video-control-mode="hover"
   />
 </template>

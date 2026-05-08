@@ -8,6 +8,7 @@ import ArtbookTopControls from '../components/ArtbookTopControls.vue'
 import { artbookZoomResetKey } from '../composables/useArtbookZoomReset'
 import { useSimpleRouter } from '../composables/useSimpleRouter'
 import { Icons } from '../icons'
+import { publicAsset } from '../utils/publicPath'
 
 interface ZoomPan {
   x: number
@@ -26,6 +27,7 @@ const minZoomLevel = 1
 const maxZoomLevel = 2.6
 const zoomStep = 0.12
 const smoothResetDuration = 320
+const shellBackgroundImage = `url("${publicAsset('images/fond.jpg')}")`
 
 const pageElement = ref<HTMLElement | null>(null)
 const isPagesMenuOpen = ref(false)
@@ -214,7 +216,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
 </script>
 
 <template>
-  <main class="artbook-shell">
+  <main class="artbook-shell" :style="{ '--artbook-shell-background-image': shellBackgroundImage }">
     <div class="artbook-stage">
       <!-- Barre supérieure commune: logo, musique, carte, lexique et menu des pages. -->
       <ArtbookTopControls
@@ -298,7 +300,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
   background:
     radial-gradient(circle at 50% 8%, rgba(201, 168, 95, 0.2), transparent 34%),
     linear-gradient(rgba(8, 8, 12, 0.38), rgba(3, 3, 7, 0.58)),
-    url('/images/fond.jpg') center / cover;
+    var(--artbook-shell-background-image) center / cover;
   color: #f5f0e8;
   display: flex;
   justify-content: center;

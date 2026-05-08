@@ -7,6 +7,7 @@ import { Icons } from '../icons'
 import ArtbookLexiconModal from './ArtbookLexiconModal.vue'
 import ArtbookMapModal from './ArtbookMapModal.vue'
 import PagesMenu from './PagesMenu.vue'
+import { publicAsset } from '../utils/publicPath'
 
 defineProps<{
   currentPage: ArtbookPage
@@ -19,6 +20,7 @@ const emit = defineEmits<{
 }>()
 
 const { isMuted, initializeMusic, toggleMute } = useMusicPlayer()
+const logoImage = publicAsset('images/logo.png')
 
 // Chaque modale possède son propre état pour éviter qu'elles s'ouvrent toutes en même temps.
 const isMapOpen = ref(false)
@@ -49,7 +51,7 @@ function openLexicon() {
   <header class="top-controls">
     <!-- Logo principal de l'artbook, remplacé par une image pour respecter l'identité visuelle du projet. -->
     <div class="brand-mark">
-      <img class="brand-logo" src="/images/logo.png" alt="Firaluna" />
+      <img class="brand-logo" :src="logoImage" alt="Firaluna" />
     </div>
 
     <!-- Point d'ancrage où les menus d'étapes et les instructions vidéo sont téléportés. -->

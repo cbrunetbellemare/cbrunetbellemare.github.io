@@ -5,6 +5,7 @@ import ArtbookVideoPage from '../../components/ArtbookVideoPage.vue'
 import VideoReplayMenu from '../../components/VideoReplayMenu.vue'
 import { useArtbookZoomReset } from '../../composables/useArtbookZoomReset'
 import type { ArtbookPage } from '../../data/artbookPages'
+import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
@@ -13,6 +14,7 @@ defineProps<{
 const hasStartedVideo = ref(false)
 const isStartingVideo = ref(false)
 const resetArtbookZoom = useArtbookZoomReset()
+const prefaceVideo = publicAsset('videos/prefaceVideo.mp4')
 
 async function startVideo() {
   // La préface commence par l'image; la vidéo se lance seulement quand l'utilisateur le demande.
@@ -33,7 +35,7 @@ async function startVideo() {
     v-if="hasStartedVideo"
     :image="page.pageImage"
     :name="page.name"
-    video-src="/videos/prefaceVideo.mp4"
+    :video-src="prefaceVideo"
     close-button-right="clamp(18px, 2.2vh, 32px)"
     close-button-top="clamp(18px, 2.2vh, 32px)"
   />

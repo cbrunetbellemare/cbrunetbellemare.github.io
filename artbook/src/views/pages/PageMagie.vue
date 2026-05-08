@@ -2,6 +2,7 @@
 import ArtbookImageVersionPage from '../../components/ArtbookImageVersionPage.vue'
 import type { ImageVersion } from '../../components/ImageVersionMenu.vue'
 import type { ArtbookPage } from '../../data/artbookPages'
+import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
@@ -12,15 +13,15 @@ defineProps<{
 const imageVersions = [
   {
     label: 'Croquis',
-    image: '/images/pages/magieSketch.jpg',
+    image: publicAsset('images/pages/magieSketch.jpg'),
   },
   {
     label: 'Couleur',
-    image: '/images/pages/magieColor.jpg',
+    image: publicAsset('images/pages/magieColor.jpg'),
   },
   {
     label: 'Final',
-    image: '/images/pages/magie.jpg',
+    image: publicAsset('images/pages/magie.jpg'),
   },
 ] satisfies [ImageVersion, ...ImageVersion[]]
 </script>
