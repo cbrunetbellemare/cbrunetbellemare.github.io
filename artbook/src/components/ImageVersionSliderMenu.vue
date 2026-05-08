@@ -12,20 +12,18 @@ const emit = defineEmits<{
   select: [index: number]
 }>()
 
-// Contrairement au menu à boutons, ce contrôle est continu et permet de s'arrêter entre deux versions.
-// Le slider peut s'arrêter entre deux étapes; on arrondit seulement pour le label actif.
+// Le slider peut être entre deux images, donc on arrondit pour le titre actif.
 const nearestVersionIndex = computed(() => clamp(Math.round(props.activeIndex), 0, props.versions.length - 1))
 const activeVersion = computed(() => props.versions[nearestVersionIndex.value] ?? props.versions[0])
 
 function selectVersion(event: Event) {
   const input = event.currentTarget as HTMLInputElement
-  // La valeur envoyée peut être décimale pour permettre un mélange progressif des images.
+  // Envoie la valeur exacte du slider.
   emit('select', Number(input.value))
 }
 
 function getLabelOpacity(index: number) {
-  // Les noms des étapes suivent visuellement le même principe que les images:
-  // le label devient plus lisible quand le slider se rapproche de son étape.
+  // Le nom proche du curseur devient plus visible.
   const blendWeight = clamp(1 - Math.abs(index - props.activeIndex), 0, 1)
 
   return 0.48 + blendWeight * 0.52
@@ -37,7 +35,7 @@ function clamp(value: number, min: number, max: number) {
 </script>
 
 <template>
-  <!-- Le slider reste dans la zone de contrôle supérieure pour être cohérent avec l'autre menu. -->
+  <!-- Place le slider dans la barre du haut. -->
   <Teleport defer to="#artbook-version-controls">
     <div
       class="image-version-slider artbook-panel"
@@ -59,7 +57,7 @@ function clamp(value: number, min: number, max: number) {
         </span>
       </div>
 
-      <!-- Le pas fin permet d'arrêter le curseur entre deux étapes au lieu de sauter d'une image à l'autre. -->
+      <!-- Petit pas pour pouvoir être entre deux images. -->
       <input
         class="version-slider"
         type="range"

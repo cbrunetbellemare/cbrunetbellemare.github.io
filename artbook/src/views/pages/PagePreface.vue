@@ -17,7 +17,7 @@ const resetArtbookZoom = useArtbookZoomReset()
 const prefaceVideo = publicAsset('videos/prefaceVideo.mp4')
 
 async function startVideo() {
-  // La préface commence par l'image; la vidéo se lance seulement quand l'utilisateur le demande.
+  // Lance la vidéo seulement après le clic.
   if (hasStartedVideo.value || isStartingVideo.value) {
     return
   }
@@ -30,18 +30,19 @@ async function startVideo() {
 </script>
 
 <template>
-  <!-- Après le premier lancement, la page utilise le lecteur vidéo complet. -->
+  <!-- Après le clic, affiche le lecteur vidéo. -->
   <ArtbookVideoPage
     v-if="hasStartedVideo"
     :image="page.pageImage"
     :name="page.name"
     :video-src="prefaceVideo"
+    video-control-mode="hover"
     close-button-right="clamp(18px, 2.2vh, 32px)"
     close-button-top="clamp(18px, 2.2vh, 32px)"
   />
 
   <template v-else>
-    <!-- État initial: illustration fixe avec un bouton "Voir la vidéo" dans les contrôles. -->
+    <!-- Avant le clic, affiche juste l'image. -->
     <ArtbookImagePage :image="page.pageImage" :name="page.name" />
     <VideoReplayMenu @replay="startVideo" />
   </template>

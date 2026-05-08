@@ -3,9 +3,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { Icons } from '../icons'
 
 export interface ImageVersion {
-  // Texte affiché dans le contrôle d'étapes.
   label: string
-  // Image correspondant à cette étape du processus.
   image: string
 }
 
@@ -21,7 +19,7 @@ defineEmits<{
 </script>
 
 <template>
-  <!-- Menu historique: chaque bouton représente une étape fixe de l'illustration. -->
+  <!-- Boutons pour changer d'image. -->
   <Teleport defer to="#artbook-version-controls">
     <div
       class="image-version-menu artbook-panel"

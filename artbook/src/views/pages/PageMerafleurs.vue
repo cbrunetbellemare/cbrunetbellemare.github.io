@@ -8,20 +8,19 @@ defineProps<{
   page: ArtbookPage
 }>()
 
-// Les étapes suivent le processus de création: croquis, mise en couleur, puis image finale.
-// Cette page conserve le menu à boutons pour varier l'expérience selon les illustrations.
+// Les trois images montrées pour cette illustration.
 const imageVersions = [
   {
     label: 'Croquis',
-    image: publicAsset('images/pages/merafleursSketch.png'),
+    image: publicAsset('images/pages/merafleurSketch.jpg'),
   },
   {
     label: 'Couleur',
-    image: publicAsset('images/pages/merafleursColor.png'),
+    image: publicAsset('images/pages/merafleurColor.jpg'),
   },
   {
     label: 'Final',
-    image: publicAsset('images/pages/merafleur.png'),
+    image: publicAsset('images/pages/merafleurs.jpg'),
   },
 ] satisfies [ImageVersion, ...ImageVersion[]]
 </script>

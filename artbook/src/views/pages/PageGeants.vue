@@ -8,8 +8,7 @@ defineProps<{
   page: ArtbookPage
 }>()
 
-// Les étapes suivent le processus de création: croquis, mise en couleur, puis image finale.
-// Cette page conserve le menu à boutons pour montrer une navigation par étapes distinctes.
+// Les trois images montrées pour cette illustration.
 const imageVersions = [
   {
     label: 'Croquis',

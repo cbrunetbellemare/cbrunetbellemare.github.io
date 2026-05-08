@@ -3,18 +3,16 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { Icons } from '../icons'
 
 interface LexiconEntry {
-  // Mot ou concept important de l'univers.
   term: string
-  // Explication affichée dans le lexique.
   definition: string
 }
 
-// Le lexique est structuré en entrées pour conserver le texte demandé tout en facilitant la lecture.
+// Toutes les définitions affichées dans la fenêtre Lexique.
 const lexiconEntries = [
   {
     term: 'Le Cœur Éternel',
     definition:
-      'Le Cœur Éternel est un artéfact légendaire décrit comme le cœur encore battant d’un géant. Selon les récits, il serait entouré d’une énergie régénératrice capable de faire pousser une plante pouvant guérir n’importe quelle maladie.',
+      'Selon les légendes, le Cœur Éternel se trouverait sur une île imprégnée d’une puissante magie régénératrice. Cette énergie maintiendrait encore le cœur d’un géant en activité et permettrait à une plante capable de guérir n’importe quelle maladie de pousser sur l’île.',
   },
   {
     term: 'Les créatures du Chaos',
@@ -64,7 +62,7 @@ const lexiconEntries = [
   {
     term: 'Les Mérafleurs',
     definition:
-      'Les Mérafleurs sont des créatures d’eau douce ressemblant à des sirènes. Elles se camouflent parmi les nénuphars afin d’attirer leurs proies.',
+      'Les Mérafleurs sont des créatures d’eau douce ressemblant à des sirènes. Elles vivent dans les Territoires Engloutis et se camouflent parmi les nénuphars afin d’attirer leurs proies. Très territoriales, elles attaquent les étrangers naviguant dans leurs eaux.',
   },
   {
     term: 'Nassalia',
@@ -74,7 +72,7 @@ const lexiconEntries = [
   {
     term: 'Les Naufragobes',
     definition:
-      'Les Naufragobes sont des créatures marines carnivores vivant principalement dans les marais et les eaux peu profondes. Ils se nourrissent de naufragés et peuvent parfois provoquer eux-mêmes des naufrages afin d’obtenir davantage de nourriture.',
+      'Les Naufragobes sont des créatures marines carnivores servant le Roi Crapaud. Leur peuple vit principalement dans les marais et les eaux peu profondes, où ils construisent leurs communautés. Bien qu’ils préfèrent les régions d’eau douce, ils tolèrent aussi l’eau salée. Les chasseurs Naufragobes s’aventurent régulièrement en mer afin de provoquer des naufrages et rapporter les corps au reste du groupe.',
   },
   {
     term: 'L’Ordre et le Chaos',
@@ -109,7 +107,7 @@ const lexiconEntries = [
   {
     term: 'Les Vromitiens',
     definition:
-      'Les Vromitiens sont un peuple marin vivant en eau salée. Leurs ancêtres étaient autrefois réputés comme de redoutables guerriers et mercenaires, mais les attaques du Flou ont forcé leur peuple à fuir et à abandonner progressivement cette culture guerrière.',
+      'Les Vromitiens étaient autrefois un puissant peuple marin réputé pour ses guerriers et ses mercenaires. Leur proximité avec les Landes Effacées provoqua toutefois de nombreuses attaques des créatures du Chaos, forçant leur peuple à constamment fuir et reconstruire. Avec le temps, la survie devint plus importante que la guerre. Les derniers Vromitiens vivent aujourd’hui cachés dans des ruines de géants submergées.',
   },
 ] satisfies LexiconEntry[]
 
@@ -119,7 +117,7 @@ defineEmits<{
 </script>
 
 <template>
-  <!-- Le lexique est global à tout l'artbook, donc il ne dépend pas de la page courante. -->
+  <!-- Fenêtre du lexique par-dessus la page. -->
   <Teleport to="body">
     <div class="lexicon-modal-backdrop" role="presentation" @click.self="$emit('close')">
       <section class="lexicon-modal" role="dialog" aria-modal="true" aria-label="Lexique">

@@ -8,8 +8,7 @@ defineProps<{
   page: ArtbookPage
 }>()
 
-// Les étapes suivent le processus de création: croquis, mise en couleur, puis image finale.
-// Alinora utilise le slider pour comparer progressivement les étapes de l'illustration.
+// Les trois images montrées pour cette illustration.
 const imageVersions = [
   {
     label: 'Croquis',

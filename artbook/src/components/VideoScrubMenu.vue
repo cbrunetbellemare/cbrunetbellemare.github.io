@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    // Texte affiché dans la barre du haut selon le mode vidéo utilisé.
+    // Phrase affichée dans la barre du haut.
     instruction?: string
-    // Désactivé pour le mode hover, où la molette ne contrôle pas la vidéo.
+    // Dit si la molette contrôle la vidéo.
     wheelEnabled?: boolean
   }>(),
   {
@@ -21,7 +21,7 @@ function scrubWithWheel(event: WheelEvent) {
     return
   }
 
-  // Le menu peut lui-même recevoir la molette; on transmet donc l'événement au lecteur vidéo.
+  // Si la molette est sur le menu, on l'envoie quand même à la vidéo.
   event.preventDefault()
   event.stopPropagation()
   emit('scrub', event)

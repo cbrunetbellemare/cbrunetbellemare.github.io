@@ -19,7 +19,7 @@ const { navigateTo } = useSimpleRouter()
 const { allPages, isPageAccessible, unlockAllPages } = useUnlockedPages()
 
 const isUnlockModalOpen = ref(false)
-// Le bouton de déverrouillage complet disparaît automatiquement quand tout est accessible.
+// Regarde si le bouton "tout débloquer" doit encore être affiché.
 const hasLockedPages = computed(() => allPages.value.some((page) => isPageLocked(page.id)))
 
 function isPageLocked(pageId: string) {
@@ -36,7 +36,7 @@ function selectPage(page: ArtbookPage) {
 }
 
 function openUnlockModal() {
-  // L'action de déverrouillage est placée dans le menu Pages, là où le verrouillage est visible.
+  // Ouvre la confirmation avant de tout débloquer.
   isUnlockModalOpen.value = true
 }
 
@@ -48,7 +48,7 @@ function unlockAllPagesFromModal() {
 
 <template>
   <div class="pages-menu artbook-panel" role="menu">
-    <!-- Toutes les pages sont visibles, mais les pages verrouillées sont désactivées. -->
+    <!-- Les pages verrouillées ne sont pas cliquables. -->
     <button
       v-for="page in allPages"
       :key="page.id"

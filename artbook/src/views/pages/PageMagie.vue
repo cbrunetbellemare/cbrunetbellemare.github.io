@@ -8,8 +8,7 @@ defineProps<{
   page: ArtbookPage
 }>()
 
-// Les étapes suivent le processus de création: croquis, mise en couleur, puis image finale.
-// La magie utilise le slider pour permettre un crossfade continu entre les versions.
+// Les trois images montrées pour cette illustration.
 const imageVersions = [
   {
     label: 'Croquis',

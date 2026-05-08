@@ -13,11 +13,11 @@ defineEmits<{
 </script>
 
 <template>
-  <!-- La modale est téléportée dans body pour passer au-dessus du zoom et de la page courante. -->
+  <!-- La carte passe par-dessus la page. -->
   <Teleport to="body">
     <div class="map-modal-backdrop" role="presentation" @click.self="$emit('close')">
       <section class="map-modal" role="dialog" aria-modal="true" :aria-label="`Carte - ${page.name}`">
-        <!-- La carte garde son format 5:4 original et occupe une grande partie de l'écran. -->
+        <!-- Image de la carte. -->
         <img class="map-image" :src="page.mapImage" :alt="`Carte associée à ${page.name}`" />
 
         <button

@@ -24,7 +24,7 @@ const props = withDefaults(
   },
 )
 
-// L'état "fermé" dépend uniquement du bouton X; la vidéo ne disparaît pas quand elle atteint la fin.
+// Dit si la vidéo est cachée ou non.
 const isVideoClosed = ref(false)
 const videoElement = ref<HTMLVideoElement | null>(null)
 const currentTime = ref(0)
@@ -34,7 +34,7 @@ const resetArtbookZoom = useArtbookZoomReset()
 const isReplayingVideo = ref(false)
 const isHoverControlMode = computed(() => props.videoControlMode === 'hover')
 
-// La barre de progression reste synchronisée avec currentTime, peu importe le mode de contrôle choisi.
+// Pour remplir la barre de progression.
 const progressPercent = computed(() => {
   return duration.value > 0 ? (currentTime.value / duration.value) * 100 : 0
 })
@@ -57,7 +57,7 @@ onMounted(() => {
 })
 
 function scrubVideo(event: WheelEvent) {
-  // Mode classique: la molette avance ou recule la vidéo.
+  // Avec la molette, on avance ou recule la vidéo.
   if (
     isHoverControlMode.value ||
     isVideoClosed.value ||
@@ -74,7 +74,7 @@ function scrubVideo(event: WheelEvent) {
 }
 
 function scrubVideoWithHover(event: MouseEvent) {
-  // Mode alternatif: la position horizontale de la souris devient la position dans la vidéo.
+  // Avec la souris, gauche = début et droite = fin.
   if (
     !isHoverControlMode.value ||
     isVideoClosed.value ||
@@ -88,8 +88,6 @@ function scrubVideoWithHover(event: MouseEvent) {
   const bounds = videoFrame.getBoundingClientRect()
   const pointerProgress = clamp((event.clientX - bounds.left) / bounds.width, 0, 1)
 
-  // Le survol contrôle directement la position dans la vidéo:
-  // à gauche on recule, à droite on avance, sans devoir cliquer.
   setVideoTime(videoElement.value.duration * pointerProgress)
 }
 
@@ -110,7 +108,7 @@ function updateVideoMetadata() {
   }
 
   if (videoElement.value.videoWidth > 0 && videoElement.value.videoHeight > 0) {
-    // On adapte le conteneur au vrai format de la vidéo pour éviter les déformations.
+    // Garde le vrai format de la vidéo.
     videoAspectRatio.value = `${videoElement.value.videoWidth} / ${videoElement.value.videoHeight}`
   }
 
@@ -131,7 +129,7 @@ async function replayVideo() {
 }
 
 function closeVideo() {
-  // La vidéo reste visible quand elle arrive à la fin; seul le bouton X ferme le lecteur.
+  // Cache la vidéo quand on clique sur X.
   isVideoClosed.value = true
 }
 
@@ -225,13 +223,16 @@ function clamp(value: number, min: number, max: number) {
 }
 
 .video-shell {
+  --video-timeline-gap: clamp(8px, 1vh, 14px);
+  --video-timeline-height: clamp(5px, 0.66vh, 10px);
+
   position: absolute;
   left: 50%;
   top: 50%;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  gap: clamp(8px, 1vh, 14px);
-  height: min(82%, calc(100% - 44px));
+  height: min(
+    calc(82% - var(--video-timeline-gap) - var(--video-timeline-height)),
+    calc(100% - 44px - var(--video-timeline-gap) - var(--video-timeline-height))
+  );
   max-width: calc(100% - 56px);
   aspect-ratio: 4 / 5;
   transform: translate(-50%, -50%);
@@ -239,6 +240,8 @@ function clamp(value: number, min: number, max: number) {
 
 .video-frame {
   position: relative;
+  width: 100%;
+  height: 100%;
   min-height: 0;
   overflow: hidden;
   background: transparent;
@@ -287,11 +290,14 @@ function clamp(value: number, min: number, max: number) {
 }
 
 .video-timeline {
+  position: absolute;
+  top: calc(100% + var(--video-timeline-gap));
+  left: 0;
   width: 100%;
 }
 
 .video-timeline-track {
-  height: clamp(5px, 0.66vh, 10px);
+  height: var(--video-timeline-height);
   overflow: hidden;
   border: 1px solid rgba(var(--artbook-gold-rgb), 0.32);
   background: var(--artbook-menu-item-bg);

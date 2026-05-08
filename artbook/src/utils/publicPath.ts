@@ -1,5 +1,4 @@
-// Ce helper centralise les chemins vers les fichiers places dans public/.
-// Il permet au site de fonctionner autant en local qu'une fois publie sous /firaluna/ sur GitHub Pages.
+// Petit raccourci pour aller chercher les images, vidéos et sons dans public/.
 export function publicAsset(path: string) {
   const baseUrl = import.meta.env.BASE_URL.endsWith('/')
     ? import.meta.env.BASE_URL

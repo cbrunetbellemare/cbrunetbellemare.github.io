@@ -22,9 +22,10 @@ const emit = defineEmits<{
 const { isMuted, initializeMusic, toggleMute } = useMusicPlayer()
 const logoImage = publicAsset('images/logo.png')
 
-// Chaque modale possède son propre état pour éviter qu'elles s'ouvrent toutes en même temps.
+// Chaque fenêtre a son booléen pour savoir si elle est ouverte.
 const isMapOpen = ref(false)
 const isLexiconOpen = ref(false)
+const isUtilityMenuOpen = ref(false)
 const musicIconPath = computed(() => (isMuted.value ? Icons.MusicOff : Icons.MusicOn))
 const musicButtonLabel = computed(() => (isMuted.value ? 'Activer la musique' : 'Couper la musique'))
 
@@ -33,61 +34,94 @@ onMounted(() => {
 })
 
 function openMap() {
-  // On ferme d'abord les autres panneaux pour garder une seule modale active.
+  // Quand la carte ouvre, on ferme les autres menus.
   emit('closePagesMenu')
+  isUtilityMenuOpen.value = false
   isLexiconOpen.value = false
   isMapOpen.value = true
 }
 
 function openLexicon() {
-  // Le lexique est une modale globale; on ferme donc les autres panneaux avant de l'afficher.
+  // Même principe que la carte, mais pour le lexique.
   emit('closePagesMenu')
+  isUtilityMenuOpen.value = false
   isMapOpen.value = false
   isLexiconOpen.value = true
+}
+
+function toggleUtilityMenu() {
+  isUtilityMenuOpen.value = !isUtilityMenuOpen.value
+  emit('closePagesMenu')
+}
+
+function toggleMusicFromUtilityMenu() {
+  toggleMute()
+  isUtilityMenuOpen.value = false
 }
 </script>
 
 <template>
   <header class="top-controls">
-    <!-- Logo principal de l'artbook, remplacé par une image pour respecter l'identité visuelle du projet. -->
+    <!-- Logo du projet. -->
     <div class="brand-mark">
       <img class="brand-logo" :src="logoImage" alt="Firaluna" />
     </div>
 
-    <!-- Point d'ancrage où les menus d'étapes et les instructions vidéo sont téléportés. -->
+    <!-- Les menus des pages viennent se placer ici avec Teleport. -->
     <div id="artbook-version-controls" class="version-controls-target"></div>
 
     <nav class="actions" aria-label="Artbook controls">
-      <button
-        class="control-button icon-control-button artbook-hover-highlight"
-        type="button"
-        :aria-label="musicButtonLabel"
-        :title="musicButtonLabel"
-        :aria-pressed="isMuted"
-        @click="toggleMute"
-      >
-        <SvgIcon class="music-icon" type="mdi" :path="musicIconPath" :size="20" aria-hidden="true" />
-      </button>
+      <div class="utility-controls">
+        <button
+          class="control-button icon-control-button utility-toggle artbook-hover-highlight"
+          type="button"
+          aria-label="Ouvrir les controles secondaires"
+          :aria-expanded="isUtilityMenuOpen"
+          aria-controls="utility-controls-menu"
+          @click="toggleUtilityMenu"
+        >
+          <SvgIcon class="menu-icon" type="mdi" :path="Icons.Menu" :size="20" aria-hidden="true" />
+        </button>
 
-      <button
-        class="control-button map-control-button artbook-hover-highlight"
-        type="button"
-        aria-haspopup="dialog"
-        :aria-expanded="isMapOpen"
-        @click="openMap"
-      >
-        Carte
-      </button>
+        <nav
+          v-if="isUtilityMenuOpen"
+          id="utility-controls-menu"
+          class="utility-menu artbook-panel"
+          aria-label="Musique, carte et lexique"
+        >
+          <button
+            class="control-button side-control-button artbook-hover-highlight"
+            type="button"
+            :aria-label="musicButtonLabel"
+            :title="musicButtonLabel"
+            :aria-pressed="isMuted"
+            @click="toggleMusicFromUtilityMenu"
+          >
+            <SvgIcon class="music-icon" type="mdi" :path="musicIconPath" :size="20" aria-hidden="true" />
+            <span>Musique</span>
+          </button>
 
-      <button
-        class="control-button lexicon-control-button artbook-hover-highlight"
-        type="button"
-        aria-haspopup="dialog"
-        :aria-expanded="isLexiconOpen"
-        @click="openLexicon"
-      >
-        Lexique
-      </button>
+          <button
+            class="control-button side-control-button artbook-hover-highlight"
+            type="button"
+            aria-haspopup="dialog"
+            :aria-expanded="isMapOpen"
+            @click="openMap"
+          >
+            Carte
+          </button>
+
+          <button
+            class="control-button side-control-button artbook-hover-highlight"
+            type="button"
+            aria-haspopup="dialog"
+            :aria-expanded="isLexiconOpen"
+            @click="openLexicon"
+          >
+            Lexique
+          </button>
+        </nav>
+      </div>
 
       <div class="pages-menu-wrapper">
         <button
@@ -190,21 +224,50 @@ function openLexicon() {
   padding-inline: clamp(8px, 0.9vh, 14px);
 }
 
-.pages-control-button,
-.map-control-button {
+.pages-control-button {
   min-width: clamp(72px, 6.8vh, 118px);
-}
-
-.lexicon-control-button {
-  min-width: clamp(86px, 8.2vh, 132px);
 }
 
 .icon-control-button :deep(svg) {
   display: block;
 }
 
-.music-icon {
+.music-icon,
+.menu-icon {
   width: 1em;
   height: 1em;
+}
+
+.utility-controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-block: var(--artbook-panel-padding-sm);
+}
+
+.utility-toggle {
+  width: clamp(36px, 4.4vh, 56px);
+  min-width: 0;
+  padding-inline: clamp(8px, 0.9vh, 14px);
+}
+
+.utility-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + clamp(10px, 1.1vh, 16px));
+  z-index: 10;
+  display: grid;
+  gap: clamp(6px, 0.7vh, 10px);
+  width: min(78vw, clamp(180px, 20vh, 260px));
+  max-height: calc(100vh - clamp(92px, 10vh, 148px));
+  overflow-y: auto;
+  padding: var(--artbook-panel-padding-sm);
+}
+
+.side-control-button {
+  justify-content: center;
+  gap: var(--artbook-control-gap);
+  width: 100%;
+  min-width: 0;
 }
 </style>

@@ -13,7 +13,7 @@ const activeRoute = computed(() => {
 })
 
 watchEffect(() => {
-  // App.vue joue le rôle de gardien: il corrige les routes inconnues et bloque les pages verrouillées.
+  // Vérifie si la page demandée existe et si elle est débloquée.
   const route = activeRoute.value
 
   if (route.path !== currentPath.value) {
@@ -26,13 +26,13 @@ watchEffect(() => {
     return
   }
 
-  // Lire une page débloque automatiquement la suivante pour créer une progression guidée.
+  // Quand une page est vue, la prochaine devient disponible.
   unlockNextPage(route.page.id)
 })
 </script>
 
 <template>
-  <!-- Le layout reste commun, tandis que le composant de page change selon la route active. -->
+  <!-- Le cadre reste pareil, seulement la page change. -->
   <ArtbookLayout :page="activeRoute.page">
     <component :is="activeRoute.component" :page="activeRoute.page" />
   </ArtbookLayout>

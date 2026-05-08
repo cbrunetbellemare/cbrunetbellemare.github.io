@@ -7,7 +7,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // Le site est prevu pour etre publie a la racine GitHub Pages: https://cbrunetbellemare.github.io/.
+  // Le site est publié à la racine, donc pas besoin d'un dossier de base.
   base: '/',
   plugins: [
     vue(),

@@ -8,8 +8,7 @@ defineProps<{
   page: ArtbookPage
 }>()
 
-// Les étapes suivent le processus de création: croquis, mise en couleur, puis image finale.
-// Sans propriété "controls", le composant partagé utilise le menu à boutons par défaut.
+// Les trois images montrées pour cette illustration.
 const imageVersions = [
   {
     label: 'Croquis',

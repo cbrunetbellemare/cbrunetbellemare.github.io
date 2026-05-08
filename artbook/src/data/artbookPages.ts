@@ -1,27 +1,20 @@
 import { publicAsset } from '../utils/publicPath'
 
 export interface ArtbookPage {
-  // Identifiant stable utilisé par le routeur, le menu et le système de verrouillage.
   id: string
-  // Nom visible dans le menu Pages, les textes alternatifs et les modales.
   name: string
-  // URL interne utilisée par le routeur simple de l'artbook.
   routePath: string
-  // Image finale de la page, utilisée comme visuel principal.
   pageImage: string
-  // Carte associée à la page, affichée dans la modale Carte.
   mapImage: string
-  // Page débloquée automatiquement après avoir consulté celle-ci.
   nextPageId?: string
 }
 
-// Cette liste définit l'ordre narratif de l'artbook, les noms affichés dans le menu
-// ainsi que les images principales et cartes associées à chaque page.
+// Liste des pages dans l'ordre de lecture.
 export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
   {
     id: 'preface',
     name: 'Préface',
-    routePath: '/pages/foreword',
+    routePath: '/foreword',
     pageImage: publicAsset('images/pages/preface.jpg'),
     mapImage: publicAsset('images/maps/map.jpg'),
     nextPageId: 'geants',
@@ -29,7 +22,7 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
   {
     id: 'geants',
     name: 'Les géants',
-    routePath: '/pages/geants',
+    routePath: '/geants',
     pageImage: publicAsset('images/pages/geants.jpg'),
     mapImage: publicAsset('images/maps/mapTlezos.jpg'),
     nextPageId: 'magie',
@@ -37,7 +30,7 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
   {
     id: 'magie',
     name: 'La magie',
-    routePath: '/pages/magie',
+    routePath: '/magie',
     pageImage: publicAsset('images/pages/magie.jpg'),
     mapImage: publicAsset('images/maps/mapMagie.jpg'),
     nextPageId: 'flou',
@@ -45,7 +38,7 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
   {
     id: 'flou',
     name: 'Le Flou',
-    routePath: '/pages/flou',
+    routePath: '/flou',
     pageImage: publicAsset('images/pages/flou.jpg'),
     mapImage: publicAsset('images/maps/mapFlou.jpg'),
     nextPageId: 'dragons',
@@ -53,7 +46,7 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
   {
     id: 'dragons',
     name: 'Les dragons',
-    routePath: '/pages/dragons',
+    routePath: '/dragons',
     pageImage: publicAsset('images/pages/dragons.jpg'),
     mapImage: publicAsset('images/maps/mapDragons.jpg'),
     nextPageId: 'talia',
@@ -61,7 +54,7 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
   {
     id: 'talia',
     name: 'Talia',
-    routePath: '/pages/talia',
+    routePath: '/talia',
     pageImage: publicAsset('images/pages/talia.jpg'),
     mapImage: publicAsset('images/maps/mapTalia.jpg'),
     nextPageId: 'alinora',
@@ -69,7 +62,7 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
   {
     id: 'alinora',
     name: 'Alinora',
-    routePath: '/pages/alinora',
+    routePath: '/alinora',
     pageImage: publicAsset('images/pages/alinora.jpg'),
     mapImage: publicAsset('images/maps/mapAlinora.jpg'),
     nextPageId: 'merafleurs',
@@ -77,15 +70,15 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
   {
     id: 'merafleurs',
     name: 'Les Mérafleurs',
-    routePath: '/pages/merafleurs',
-    pageImage: publicAsset('images/pages/merafleur.png'),
+    routePath: '/merafleurs',
+    pageImage: publicAsset('images/pages/merafleurs.jpg'),
     mapImage: publicAsset('images/maps/mapAlinora.jpg'),
     nextPageId: 'romy',
   },
   {
     id: 'romy',
     name: 'Romy',
-    routePath: '/pages/romy',
+    routePath: '/romy',
     pageImage: publicAsset('images/pages/romy.jpg'),
     mapImage: publicAsset('images/maps/mapRomy.jpg'),
   },

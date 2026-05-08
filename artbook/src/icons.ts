@@ -4,6 +4,7 @@ import {
   mdiClose,
   mdiLock,
   mdiLockOpenVariant,
+  mdiMenu,
   mdiPlay,
   mdiReplay,
   mdiStarFourPoints,
@@ -13,14 +14,14 @@ import {
   mdiVolumeOff,
 } from '@mdi/js'
 
-// Regroupe toutes les icônes Material Design utilisées dans l'interface.
-// Cela évite de réimporter les chemins SVG dans chaque composant.
+// Icônes utilisées dans les boutons.
 export const Icons = {
   ChevronLeft: mdiChevronLeft,
   ChevronRight: mdiChevronRight,
   Close: mdiClose,
   Lock: mdiLock,
   LockOpen: mdiLockOpenVariant,
+  Menu: mdiMenu,
   MusicOn: mdiVolumeHigh,
   MusicOff: mdiVolumeOff,
   Play: mdiPlay,

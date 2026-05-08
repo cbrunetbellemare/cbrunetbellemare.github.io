@@ -9,7 +9,7 @@ defineEmits<{
 </script>
 
 <template>
-  <!-- Confirmation volontaire avant de contourner la lecture progressive de l'artbook. -->
+  <!-- Demande une confirmation avant de tout débloquer. -->
   <Teleport to="body">
     <div class="unlock-modal-backdrop" role="presentation" @click.self="$emit('close')">
       <section class="unlock-modal" role="dialog" aria-modal="true" aria-label="Débloquer toutes les pages">

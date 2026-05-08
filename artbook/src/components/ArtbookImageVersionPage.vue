@@ -8,7 +8,7 @@ const props = withDefaults(
     pageName: string
     versions: readonly [ImageVersion, ...ImageVersion[]]
     ariaLabel?: string
-    // Le même composant supporte deux expériences: menu à boutons ou slider continu.
+    // Choisit entre boutons ou slider.
     controls?: 'buttons' | 'slider'
   }>(),
   {
@@ -16,18 +16,17 @@ const props = withDefaults(
   },
 )
 
-// Ce composant sert à toutes les pages "étapes" pour éviter de répéter la même logique.
-// En mode slider, cette valeur peut être décimale afin de mélanger deux étapes voisines.
+// Garde l'étape de l'image affichée.
 const imageProgress = ref(0)
 const hasSliderControls = computed(() => props.controls === 'slider')
 const activeImageIndex = computed(() => {
-  // Les textes alternatifs et l'état actif restent associés à l'étape la plus proche.
+  // Pour le slider, on prend l'image la plus proche.
   return clamp(Math.round(imageProgress.value), 0, props.versions.length - 1)
 })
 const activeImage = computed<ImageVersion>(() => props.versions[activeImageIndex.value] ?? props.versions[0])
 
 onMounted(() => {
-  // Les images des étapes sont préchargées pour rendre le changement visuel plus fluide.
+  // Charge les images avant pour éviter un flash.
   props.versions.forEach((version) => {
     const image = new Image()
     image.src = version.image
@@ -35,7 +34,7 @@ onMounted(() => {
 })
 
 function selectImageVersion(index: number) {
-  // Le clamp protège contre les valeurs hors limites venant du slider ou d'un bouton.
+  // Empêche de dépasser la première ou la dernière image.
   imageProgress.value = clamp(index, 0, props.versions.length - 1)
 }
 
@@ -44,8 +43,7 @@ function getImageOpacity(index: number) {
     return index === activeImageIndex.value ? 1 : 0
   }
 
-  // Plus le slider est proche d'une étape, plus cette image devient visible.
-  // Entre deux étapes, les deux images partagent l'opacité pour créer un vrai crossfade.
+  // Avec le slider, deux images peuvent être visibles en même temps.
   return clamp(1 - Math.abs(index - imageProgress.value), 0, 1)
 }
 
@@ -56,7 +54,7 @@ function clamp(value: number, min: number, max: number) {
 
 <template>
   <article class="image-version-page">
-    <!-- Le mode slider garde toutes les images superposées pour permettre un mélange continu. -->
+    <!-- Pour le slider, les images sont empilées. -->
     <div v-if="hasSliderControls" class="page-image-stack">
       <img
         v-for="(version, index) in versions"
@@ -69,7 +67,7 @@ function clamp(value: number, min: number, max: number) {
       />
     </div>
 
-    <!-- Le mode boutons affiche une seule image à la fois, comme dans le comportement original. -->
+    <!-- Avec les boutons, une seule image s'affiche. -->
     <img
       v-else
       class="page-image"

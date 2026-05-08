@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { artbookPages, findArtbookPageById, firstArtbookPage } from '../data/artbookPages'
 
-// Clé de stockage locale pour mémoriser la progression entre deux visites.
+// Sert à garder les pages débloquées dans le navigateur.
 const unlockedStorageKey = 'artbook.unlockedPages.v2'
 
 const unlockedPageIds = ref<string[]>(normalizeStoredIds(readStoredIds(unlockedStorageKey)))
@@ -32,12 +32,12 @@ function addStoredId(ids: string[], pageId: string) {
 }
 
 function normalizeStoredIds(ids: string[]) {
-  // La première page est toujours disponible, donc on ne la stocke pas.
+  // La première page est déjà ouverte au départ.
   return ids.filter((pageId) => pageId !== firstArtbookPage.id && Boolean(findArtbookPageById(pageId)))
 }
 
 export function useUnlockedPages() {
-  // Le menu affiche toutes les pages, mais seules les pages accessibles peuvent être ouvertes.
+  // Le menu voit toutes les pages, mais pas toutes cliquables.
   const allPages = computed(() => artbookPages)
   const accessiblePages = computed(() => {
     return artbookPages.filter((page) => isPageAccessible(page.id))
@@ -59,14 +59,14 @@ export function useUnlockedPages() {
   function unlockNextPage(currentPageId: string) {
     const currentPage = findArtbookPageById(currentPageId)
 
-    // Lorsqu'une page est consultée, seule la page suivante devient disponible.
+    // Quand une page est lue, on ouvre la suivante.
     if (currentPage?.nextPageId) {
       unlockPage(currentPage.nextPageId)
     }
   }
 
   function unlockAllPages() {
-    // Option volontaire: elle sert aux visiteurs qui veulent consulter librement l'artbook.
+    // Bouton pour tout débloquer.
     unlockedPageIds.value = artbookPages
       .filter((page) => page.id !== firstArtbookPage.id)
       .map((page) => page.id)
