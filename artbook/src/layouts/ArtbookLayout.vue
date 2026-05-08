@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Cadre commun: fond, navigation entre pages, zoom et zone où les pages s'affichent.
 import SvgIcon from '@jamescoyle/vue-icon'
 import VueZoomable from 'vue-zoomable'
 import 'vue-zoomable/dist/style.css'
@@ -8,7 +9,6 @@ import ArtbookTopControls from '../components/ArtbookTopControls.vue'
 import { artbookZoomResetKey } from '../composables/useArtbookZoomReset'
 import { useSimpleRouter } from '../composables/useSimpleRouter'
 import { Icons } from '../icons'
-import { publicAsset } from '../utils/publicPath'
 
 interface ZoomPan {
   x: number
@@ -20,6 +20,7 @@ const props = defineProps<{
 }>()
 
 const { navigateTo } = useSimpleRouter()
+// Les pages enfants peuvent demander un reset avant une vidéo ou un changement d'état.
 provide(artbookZoomResetKey, resetZoomFromChild)
 
 // Valeurs du zoom utilisées partout.
@@ -27,7 +28,7 @@ const minZoomLevel = 1
 const maxZoomLevel = 2.6
 const zoomStep = 0.12
 const smoothResetDuration = 320
-const shellBackgroundImage = `url("${publicAsset('images/fond.jpg')}")`
+const shellBackgroundImage = `url("/images/fond.jpg")`
 
 const pageElement = ref<HTMLElement | null>(null)
 const isPagesMenuOpen = ref(false)
@@ -37,11 +38,15 @@ let smoothResetFrame: number | undefined
 let smoothResetResolve: (() => void) | undefined
 
 const isZoomed = computed(() => zoomLevel.value > minZoomLevel)
-const currentPageIndex = computed(() => artbookPages.findIndex((candidate) => candidate.id === props.page.id))
+const currentPageIndex = computed(() =>
+  artbookPages.findIndex((candidate) => candidate.id === props.page.id),
+)
 const previousPage = computed(() =>
+  // undefined désactive la flèche de gauche.
   currentPageIndex.value > 0 ? artbookPages[currentPageIndex.value - 1] : undefined,
 )
 const nextPage = computed(() =>
+  // undefined désactive la flèche de droite.
   currentPageIndex.value >= 0 && currentPageIndex.value < artbookPages.length - 1
     ? artbookPages[currentPageIndex.value + 1]
     : undefined,
@@ -58,7 +63,10 @@ watch(
 watch(
   [zoomLevel, () => zoomPan.value.x, () => zoomPan.value.y],
   ([nextZoomLevel]) => {
-    if (nextZoomLevel <= minZoomLevel && (nextZoomLevel !== minZoomLevel || hasPanOffset(zoomPan.value))) {
+    if (
+      nextZoomLevel <= minZoomLevel &&
+      (nextZoomLevel !== minZoomLevel || hasPanOffset(zoomPan.value))
+    ) {
       resetZoom()
       return
     }
@@ -109,6 +117,7 @@ function resetZoomSmooth() {
     smoothResetResolve = resolve
 
     function animateReset(timestamp: number) {
+      // Animation courte pour ne pas couper brutalement la lecture vidéo.
       const progress = clamp((timestamp - startTime) / smoothResetDuration, 0, 1)
       const easedProgress = easeOutCubic(progress)
 
@@ -136,6 +145,7 @@ function resetZoomSmooth() {
 
 function cancelSmoothReset() {
   if (smoothResetFrame === undefined) {
+    // Résout la promesse même si l'animation n'a jamais commencé.
     smoothResetResolve?.()
     smoothResetResolve = undefined
     return
@@ -166,6 +176,7 @@ function getConstrainedPan(pan: ZoomPan) {
 }
 
 function getPanBounds() {
+  // Le déplacement permis dépend de la taille affichée et du niveau de zoom.
   const pageBounds = pageElement.value?.getBoundingClientRect()
   const zoomOverflow = Math.max(zoomLevel.value - minZoomLevel, 0)
 
@@ -210,6 +221,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
     return
   }
 
+  // Le menu des pages ne doit pas rester ouvert après navigation par flèche.
   isPagesMenuOpen.value = false
   navigateTo(targetPage.routePath)
 }

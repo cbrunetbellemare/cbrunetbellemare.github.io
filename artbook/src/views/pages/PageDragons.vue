@@ -1,17 +1,17 @@
 <script setup lang="ts">
+// Page Les dragons: vidéo contrôlée par position horizontale de la souris.
 import ArtbookVideoPage from '../../components/ArtbookVideoPage.vue'
 import type { ArtbookPage } from '../../data/artbookPages'
-import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
 }>()
 
-const dragonsVideo = publicAsset('videos/dragonsVideo.mp4')
+const dragonsVideo = '/videos/dragonsVideo.mp4'
 </script>
 
 <template>
-  <!-- Les dragons utilisent le mode vidéo alternatif: le survol horizontal contrôle le temps de la vidéo. -->
+  <!-- Les dragons utilisent le mode vidéo hover: le survol horizontal contrôle le temps de la vidéo. -->
   <ArtbookVideoPage
     :image="page.pageImage"
     :name="page.name"

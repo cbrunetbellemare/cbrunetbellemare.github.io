@@ -1,8 +1,10 @@
+// Petit routeur maison: suffisant pour cet artbook sans installer Vue Router.
 import { ref } from 'vue'
 
 const currentPath = ref(normalizePath(window.location.pathname))
 
 window.addEventListener('popstate', () => {
+  // Boutons précédent/suivant du navigateur.
   currentPath.value = normalizePath(window.location.pathname)
 })
 
@@ -22,6 +24,7 @@ export function useSimpleRouter() {
       return
     }
 
+    // replace évite d'empiler les redirections automatiques dans l'historique.
     const historyMethod = replace ? 'replaceState' : 'pushState'
     window.history[historyMethod]({}, '', toBrowserPath(path))
     // On garde aussi la route dans Vue pour changer la page affichée.

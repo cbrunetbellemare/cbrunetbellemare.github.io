@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Menu compact: boutons pour choisir une version précise de l'image.
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Icons } from '../icons'
 
@@ -19,7 +20,7 @@ defineEmits<{
 </script>
 
 <template>
-  <!-- Boutons pour changer d'image. -->
+  <!-- Teleport: les contrôles restent dans la barre du haut. -->
   <Teleport defer to="#artbook-version-controls">
     <div
       class="image-version-menu artbook-panel"

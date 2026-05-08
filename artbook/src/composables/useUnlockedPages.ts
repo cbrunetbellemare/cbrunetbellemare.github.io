@@ -1,3 +1,4 @@
+// Gestion des pages débloquées: état partagé et persistance dans localStorage.
 import { computed, ref } from 'vue'
 import { artbookPages, findArtbookPageById, firstArtbookPage } from '../data/artbookPages'
 
@@ -15,6 +16,7 @@ function readStoredIds(key: string) {
 
   try {
     const parsedValue: unknown = JSON.parse(storedValue)
+    // localStorage n'est pas fiable: on garde seulement un tableau de strings.
     return Array.isArray(parsedValue) && parsedValue.every((item) => typeof item === 'string')
       ? parsedValue
       : []
@@ -28,6 +30,7 @@ function persistIds(key: string, ids: string[]) {
 }
 
 function addStoredId(ids: string[], pageId: string) {
+  // Évite les doublons dans la sauvegarde.
   return ids.includes(pageId) ? ids : [...ids, pageId]
 }
 
@@ -52,6 +55,7 @@ export function useUnlockedPages() {
       return
     }
 
+    // Un seul point d'écriture pour garder Vue et localStorage synchronisés.
     unlockedPageIds.value = addStoredId(unlockedPageIds.value, pageId)
     persistIds(unlockedStorageKey, unlockedPageIds.value)
   }

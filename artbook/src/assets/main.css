@@ -1,7 +1,9 @@
+/* Styles globaux de l'artbook: thème, boutons communs et panneaux réutilisables. */
 @import url('https://fonts.googleapis.com/css2?family=Amarante&display=swap');
 @import './base.css';
 
 :root {
+  /* Variables partagées pour garder les composants visuellement cohérents. */
   --artbook-gold: #f4d98b;
   --artbook-gold-bright: #f1dc9a;
   --artbook-gold-progress: #f2c96b;
@@ -44,6 +46,7 @@ button {
 }
 
 .artbook-panel {
+  /* Base commune des menus, modales et contrôles flottants. */
   border: 1px solid rgba(var(--artbook-gold-rgb), var(--artbook-panel-border-opacity, 0.46));
   border-radius: var(--artbook-panel-radius, 0);
   background: var(--artbook-panel-background, var(--artbook-panel-bg));
@@ -75,6 +78,7 @@ button {
 }
 
 .artbook-hover-highlight::before {
+  /* Overlay au survol sans changer le fond original du bouton. */
   position: absolute;
   inset: 0;
   border-radius: inherit;

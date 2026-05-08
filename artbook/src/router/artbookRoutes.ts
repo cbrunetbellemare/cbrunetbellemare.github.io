@@ -1,3 +1,4 @@
+// Routes internes de l'artbook: associe chaque URL à une page et à son composant Vue.
 import type { Component } from 'vue'
 import PageAlinora from '../views/pages/PageAlinora.vue'
 import PageDragons from '../views/pages/PageDragons.vue'
@@ -33,10 +34,12 @@ const pageComponents: Record<string, Component> = {
 export const artbookRoutes: ArtbookRoute[] = artbookPages.map((page) => ({
   path: page.routePath,
   page,
+  // Séparation données/composants: les pages restent faciles à réordonner.
   component: getPageComponent(page.id),
 }))
 
 export const fallbackRoute =
+  // Préférence à l'id de la première page pour éviter une dépendance à l'index seul.
   artbookRoutes.find((route) => route.page.id === firstArtbookPage.id) ?? (artbookRoutes[0] as ArtbookRoute)
 
 function getPageComponent(pageId: string) {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Racine de l'artbook: choisit la page active et bloque l'accès aux pages verrouillées.
 import { computed, watchEffect } from 'vue'
 import ArtbookLayout from './layouts/ArtbookLayout.vue'
 import { artbookRoutes, fallbackRoute } from './router/artbookRoutes'
@@ -9,6 +10,7 @@ const { currentPath, navigateTo } = useSimpleRouter()
 const { isPageAccessible, unlockNextPage } = useUnlockedPages()
 
 const activeRoute = computed(() => {
+  // Route inconnue = retour vers la première page.
   return artbookRoutes.find((route) => route.path === currentPath.value) ?? fallbackRoute
 })
 

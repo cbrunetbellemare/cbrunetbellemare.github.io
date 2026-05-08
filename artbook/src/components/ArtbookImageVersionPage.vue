@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Page avec versions d'image: croquis, couleur et rendu final.
 import { computed, onMounted, ref } from 'vue'
 import ImageVersionMenu, { type ImageVersion } from './ImageVersionMenu.vue'
 import ImageVersionSliderMenu from './ImageVersionSliderMenu.vue'
@@ -40,6 +41,7 @@ function selectImageVersion(index: number) {
 
 function getImageOpacity(index: number) {
   if (!hasSliderControls.value) {
+    // Mode boutons: une seule version visible.
     return index === activeImageIndex.value ? 1 : 0
   }
 

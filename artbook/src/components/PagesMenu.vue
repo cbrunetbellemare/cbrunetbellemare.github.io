@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Menu des pages: navigation visible, pages verrouillées et déblocage manuel.
 import { computed, ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { useSimpleRouter } from '../composables/useSimpleRouter'
@@ -28,6 +29,7 @@ function isPageLocked(pageId: string) {
 
 function selectPage(page: ArtbookPage) {
   if (isPageLocked(page.id)) {
+    // Double protection: le bouton est désactivé, mais la fonction reste sûre.
     return
   }
 

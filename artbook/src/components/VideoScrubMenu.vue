@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Menu d'aide vidéo: indique comment contrôler le temps de lecture.
 const props = withDefaults(
   defineProps<{
     // Phrase affichée dans la barre du haut.

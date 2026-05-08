@@ -1,8 +1,8 @@
 <script setup lang="ts">
+// Page Alinora: compare les versions avec transition slider.
 import ArtbookImageVersionPage from '../../components/ArtbookImageVersionPage.vue'
 import type { ImageVersion } from '../../components/ImageVersionMenu.vue'
 import type { ArtbookPage } from '../../data/artbookPages'
-import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
@@ -12,20 +12,21 @@ defineProps<{
 const imageVersions = [
   {
     label: 'Croquis',
-    image: publicAsset('images/pages/alinoraSketch.jpg'),
+    image: '/images/pages/alinoraSketch.jpg',
   },
   {
     label: 'Couleur',
-    image: publicAsset('images/pages/alinoraColor.jpg'),
+    image: '/images/pages/alinoraColor.jpg',
   },
   {
     label: 'Final',
-    image: publicAsset('images/pages/alinora.jpg'),
+    image: '/images/pages/alinora.jpg',
   },
 ] satisfies [ImageVersion, ...ImageVersion[]]
 </script>
 
 <template>
+  <!-- Slider: permet de voir l'évolution sans coupure nette. -->
   <ArtbookImageVersionPage
     :page-name="page.name"
     :versions="imageVersions"

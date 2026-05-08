@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Modale de lexique: définitions de l'univers accessibles depuis toutes les pages.
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Icons } from '../icons'
 

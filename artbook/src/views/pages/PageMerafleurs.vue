@@ -1,8 +1,8 @@
 <script setup lang="ts">
+// Page Les Mérafleurs: affiche les trois étapes de l'image.
 import ArtbookImageVersionPage from '../../components/ArtbookImageVersionPage.vue'
 import type { ImageVersion } from '../../components/ImageVersionMenu.vue'
 import type { ArtbookPage } from '../../data/artbookPages'
-import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
@@ -12,20 +12,21 @@ defineProps<{
 const imageVersions = [
   {
     label: 'Croquis',
-    image: publicAsset('images/pages/merafleurSketch.jpg'),
+    image: '/images/pages/merafleurSketch.jpg',
   },
   {
     label: 'Couleur',
-    image: publicAsset('images/pages/merafleurColor.jpg'),
+    image: '/images/pages/merafleurColor.jpg',
   },
   {
     label: 'Final',
-    image: publicAsset('images/pages/merafleurs.jpg'),
+    image: '/images/pages/merafleurs.jpg',
   },
 ] satisfies [ImageVersion, ...ImageVersion[]]
 </script>
 
 <template>
+  <!-- Boutons: trois versions. -->
   <ArtbookImageVersionPage
     :page-name="page.name"
     :versions="imageVersions"

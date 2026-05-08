@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Modale de carte: affiche la carte liée à la page active.
 import SvgIcon from '@jamescoyle/vue-icon'
 import type { ArtbookPage } from '../data/artbookPages'
 import { Icons } from '../icons'

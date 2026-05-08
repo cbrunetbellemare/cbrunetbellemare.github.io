@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Page vidéo interactive: image de fond, vidéo superposée et contrôle du temps.
 import { computed, onMounted, ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { useArtbookZoomReset } from '../composables/useArtbookZoomReset'
@@ -40,6 +41,7 @@ const progressPercent = computed(() => {
 })
 
 const videoInstruction = computed(() => {
+  // Texte différent selon la mécanique de contrôle choisie par la page.
   return isHoverControlMode.value
     ? 'Survole la vidéo de gauche à droite pour avancer ou reculer'
     : 'Utilise la molette de la souris pour avancer et reculer la vidéo'
@@ -53,6 +55,7 @@ const closeButtonStyle = computed(() => {
 })
 
 onMounted(() => {
+  // Une vidéo ouverte doit commencer avec la page non zoomée.
   void resetArtbookZoom?.({ smooth: true })
 })
 
@@ -96,6 +99,7 @@ function setVideoTime(nextTime: number) {
     return 0
   }
 
+  // Clamp requis: currentTime lance une erreur si la valeur sort de la durée.
   videoElement.value.currentTime = clamp(nextTime, 0, videoElement.value.duration)
   currentTime.value = videoElement.value.currentTime
 
@@ -121,6 +125,7 @@ async function replayVideo() {
     return
   }
 
+  // Verrou temporaire pour éviter deux resets en même temps.
   isReplayingVideo.value = true
   await resetArtbookZoom?.({ smooth: true })
   isVideoClosed.value = false

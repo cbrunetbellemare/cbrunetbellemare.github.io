@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Menu vidéo fermé: bouton pour afficher ou relancer la vidéo.
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Icons } from '../icons'
 
@@ -8,7 +9,7 @@ defineEmits<{
 </script>
 
 <template>
-  <!-- Bouton pour lancer ou relancer la vidéo. -->
+  <!-- Teleport: le bouton reste aligné avec les autres contrôles. -->
   <Teleport defer to="#artbook-version-controls">
     <div class="video-replay-menu artbook-panel">
       <button

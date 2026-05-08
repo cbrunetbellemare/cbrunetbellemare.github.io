@@ -1,16 +1,16 @@
 <script setup lang="ts">
+// Page Le Flou: illustration avec vidéo contrôlée par scroll de la souris.
 import ArtbookVideoPage from '../../components/ArtbookVideoPage.vue'
 import type { ArtbookPage } from '../../data/artbookPages'
-import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
 }>()
 
-const flouVideo = publicAsset('videos/flouVideo.mp4')
+const flouVideo = '/videos/flouVideo.mp4'
 </script>
 
 <template>
-  <!-- Le Flou conserve le contrôle vidéo classique par molette. -->
+  <!-- Vidéo contrôlée par scroll. -->
   <ArtbookVideoPage :image="page.pageImage" :name="page.name" :video-src="flouVideo" />
 </template>

@@ -1,3 +1,4 @@
+// toutes les icones sont ici afin de pouvoir les importer facilement dans les composants qui en ont besoin
 import {
   mdiChevronLeft,
   mdiChevronRight,
@@ -14,7 +15,6 @@ import {
   mdiVolumeOff,
 } from '@mdi/js'
 
-// Icônes utilisées dans les boutons.
 export const Icons = {
   ChevronLeft: mdiChevronLeft,
   ChevronRight: mdiChevronRight,

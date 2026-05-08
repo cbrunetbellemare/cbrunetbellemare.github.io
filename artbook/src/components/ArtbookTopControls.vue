@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Barre du haut: logo, pages, musique, carte et lexique.
 import { computed, onMounted, ref } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import type { ArtbookPage } from '../data/artbookPages'
@@ -7,7 +8,6 @@ import { Icons } from '../icons'
 import ArtbookLexiconModal from './ArtbookLexiconModal.vue'
 import ArtbookMapModal from './ArtbookMapModal.vue'
 import PagesMenu from './PagesMenu.vue'
-import { publicAsset } from '../utils/publicPath'
 
 defineProps<{
   currentPage: ArtbookPage
@@ -20,16 +20,19 @@ const emit = defineEmits<{
 }>()
 
 const { isMuted, initializeMusic, toggleMute } = useMusicPlayer()
-const logoImage = publicAsset('images/logo.png')
+const logoImage = '/images/logo.png'
 
 // Chaque fenêtre a son booléen pour savoir si elle est ouverte.
 const isMapOpen = ref(false)
 const isLexiconOpen = ref(false)
 const isUtilityMenuOpen = ref(false)
 const musicIconPath = computed(() => (isMuted.value ? Icons.MusicOff : Icons.MusicOn))
-const musicButtonLabel = computed(() => (isMuted.value ? 'Activer la musique' : 'Couper la musique'))
+const musicButtonLabel = computed(() =>
+  isMuted.value ? 'Activer la musique' : 'Couper la musique',
+)
 
 onMounted(() => {
+  // Initialisé ici parce que la barre existe sur toutes les pages.
   initializeMusic()
 })
 
@@ -50,11 +53,13 @@ function openLexicon() {
 }
 
 function toggleUtilityMenu() {
+  // Les deux menus du haut ne doivent pas se superposer.
   isUtilityMenuOpen.value = !isUtilityMenuOpen.value
   emit('closePagesMenu')
 }
 
 function toggleMusicFromUtilityMenu() {
+  // Ferme le menu après l'action pour garder l'interface légère.
   toggleMute()
   isUtilityMenuOpen.value = false
 }
@@ -97,7 +102,13 @@ function toggleMusicFromUtilityMenu() {
             :aria-pressed="isMuted"
             @click="toggleMusicFromUtilityMenu"
           >
-            <SvgIcon class="music-icon" type="mdi" :path="musicIconPath" :size="20" aria-hidden="true" />
+            <SvgIcon
+              class="music-icon"
+              type="mdi"
+              :path="musicIconPath"
+              :size="20"
+              aria-hidden="true"
+            />
             <span>Musique</span>
           </button>
 

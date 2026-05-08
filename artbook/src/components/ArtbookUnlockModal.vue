@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Modale de confirmation avant de débloquer toutes les pages.
 import SvgIcon from '@jamescoyle/vue-icon'
 import { Icons } from '../icons'
 

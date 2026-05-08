@@ -1,7 +1,7 @@
+// Lecteur musical global: une seule instance audio pour toute l'application.
 import { readonly, ref } from 'vue'
-import { publicAsset } from '../utils/publicPath'
 
-const musicSource = publicAsset('musique/musique.mp3')
+const musicSource = '/musique/musique.mp3'
 const mutedStorageKey = 'artbook.musicMuted'
 
 const isMuted = ref(readStoredMutedState())
@@ -19,6 +19,7 @@ function readStoredMutedState() {
 
 function getAudio() {
   if (!audio) {
+    // Créé à la demande pour éviter un chargement avant l'ouverture de l'app.
     audio = new Audio(musicSource)
     audio.loop = true
     audio.preload = 'auto'
@@ -42,6 +43,7 @@ function startMusicAfterInteraction() {
     return
   }
 
+  // Les navigateurs bloquent souvent l'audio avant une interaction utilisateur.
   isWaitingForInteraction = true
 
   const startMusic = () => {
@@ -65,6 +67,7 @@ async function playMusic() {
   try {
     await player.play()
   } catch {
+    // Repli silencieux si l'autoplay est refusé.
     startMusicAfterInteraction()
   }
 }
@@ -83,6 +86,7 @@ function setMuted(nextMuted: boolean) {
 
 export function useMusicPlayer() {
   function initializeMusic() {
+    // Appelé par la barre du haut pour démarrer dès que possible.
     const player = getAudio()
     player.muted = isMuted.value
     void playMusic()

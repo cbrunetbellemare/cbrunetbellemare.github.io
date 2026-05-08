@@ -1,8 +1,8 @@
 <script setup lang="ts">
+// Page Talia: compare les versions de l'illustration avec des boutons.
 import ArtbookImageVersionPage from '../../components/ArtbookImageVersionPage.vue'
 import type { ImageVersion } from '../../components/ImageVersionMenu.vue'
 import type { ArtbookPage } from '../../data/artbookPages'
-import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
@@ -12,20 +12,21 @@ defineProps<{
 const imageVersions = [
   {
     label: 'Croquis',
-    image: publicAsset('images/pages/taliaSketch.jpg'),
+    image: '/images/pages/taliaSketch.jpg',
   },
   {
     label: 'Couleur',
-    image: publicAsset('images/pages/taliaColor.jpg'),
+    image: '/images/pages/taliaColor.jpg',
   },
   {
     label: 'Final',
-    image: publicAsset('images/pages/talia.jpg'),
+    image: '/images/pages/talia.jpg',
   },
 ] satisfies [ImageVersion, ...ImageVersion[]]
 </script>
 
 <template>
+  <!-- Boutons: trois versions. -->
   <ArtbookImageVersionPage
     :page-name="page.name"
     :versions="imageVersions"

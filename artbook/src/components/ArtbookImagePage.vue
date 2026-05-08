@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Page simple: affiche une seule illustration plein cadre.
 defineProps<{
   image: string
   name: string

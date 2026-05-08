@@ -1,4 +1,4 @@
-import { publicAsset } from '../utils/publicPath'
+// Données centrales de l'artbook: ordre des pages, routes et médias associés.
 
 export interface ArtbookPage {
   id: string
@@ -15,77 +15,78 @@ export const artbookPages: readonly [ArtbookPage, ...ArtbookPage[]] = [
     id: 'preface',
     name: 'Préface',
     routePath: '/foreword',
-    pageImage: publicAsset('images/pages/preface.jpg'),
-    mapImage: publicAsset('images/maps/map.jpg'),
+    pageImage: '/images/pages/preface.jpg',
+    mapImage: '/images/maps/map.jpg',
     nextPageId: 'geants',
   },
   {
     id: 'geants',
     name: 'Les géants',
     routePath: '/geants',
-    pageImage: publicAsset('images/pages/geants.jpg'),
-    mapImage: publicAsset('images/maps/mapTlezos.jpg'),
+    pageImage: '/images/pages/geants.jpg',
+    mapImage: '/images/maps/mapTlezos.jpg',
     nextPageId: 'magie',
   },
   {
     id: 'magie',
     name: 'La magie',
     routePath: '/magie',
-    pageImage: publicAsset('images/pages/magie.jpg'),
-    mapImage: publicAsset('images/maps/mapMagie.jpg'),
+    pageImage: '/images/pages/magie.jpg',
+    mapImage: '/images/maps/mapMagie.jpg',
     nextPageId: 'flou',
   },
   {
     id: 'flou',
     name: 'Le Flou',
     routePath: '/flou',
-    pageImage: publicAsset('images/pages/flou.jpg'),
-    mapImage: publicAsset('images/maps/mapFlou.jpg'),
+    pageImage: '/images/pages/flou.jpg',
+    mapImage: '/images/maps/mapFlou.jpg',
     nextPageId: 'dragons',
   },
   {
     id: 'dragons',
     name: 'Les dragons',
     routePath: '/dragons',
-    pageImage: publicAsset('images/pages/dragons.jpg'),
-    mapImage: publicAsset('images/maps/mapDragons.jpg'),
+    pageImage: '/images/pages/dragons.jpg',
+    mapImage: '/images/maps/mapDragons.jpg',
     nextPageId: 'talia',
   },
   {
     id: 'talia',
     name: 'Talia',
     routePath: '/talia',
-    pageImage: publicAsset('images/pages/talia.jpg'),
-    mapImage: publicAsset('images/maps/mapTalia.jpg'),
+    pageImage: '/images/pages/talia.jpg',
+    mapImage: '/images/maps/mapTalia.jpg',
     nextPageId: 'alinora',
   },
   {
     id: 'alinora',
     name: 'Alinora',
     routePath: '/alinora',
-    pageImage: publicAsset('images/pages/alinora.jpg'),
-    mapImage: publicAsset('images/maps/mapAlinora.jpg'),
+    pageImage: '/images/pages/alinora.jpg',
+    mapImage: '/images/maps/mapAlinora.jpg',
     nextPageId: 'merafleurs',
   },
   {
     id: 'merafleurs',
     name: 'Les Mérafleurs',
     routePath: '/merafleurs',
-    pageImage: publicAsset('images/pages/merafleurs.jpg'),
-    mapImage: publicAsset('images/maps/mapAlinora.jpg'),
+    pageImage: '/images/pages/merafleurs.jpg',
+    mapImage: '/images/maps/mapAlinora.jpg',
     nextPageId: 'romy',
   },
   {
     id: 'romy',
     name: 'Romy',
     routePath: '/romy',
-    pageImage: publicAsset('images/pages/romy.jpg'),
-    mapImage: publicAsset('images/maps/mapRomy.jpg'),
+    pageImage: '/images/pages/romy.jpg',
+    mapImage: '/images/maps/mapRomy.jpg',
   },
 ] as const
 
 export const firstArtbookPage = artbookPages[0]
 
 export function findArtbookPageById(pageId: string) {
+  // Utilisé par le déblocage pour valider les ids sauvegardés.
   return artbookPages.find((page) => page.id === pageId)
 }

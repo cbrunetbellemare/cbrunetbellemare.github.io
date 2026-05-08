@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Menu slider: permet de fondre entre plusieurs versions d'une illustration.
 import { computed } from 'vue'
 import type { ImageVersion } from './ImageVersionMenu.vue'
 

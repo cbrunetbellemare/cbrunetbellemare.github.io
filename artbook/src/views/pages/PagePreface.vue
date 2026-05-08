@@ -1,11 +1,12 @@
 <script setup lang="ts">
+// Page Préface: démarre sur l'image, puis lance la vidéo après action utilisateur.
+// Comme un tutoriel, utilisateur doit ouvrir lui-même la vidéo pour mieux comprendre
 import { ref } from 'vue'
 import ArtbookImagePage from '../../components/ArtbookImagePage.vue'
 import ArtbookVideoPage from '../../components/ArtbookVideoPage.vue'
 import VideoReplayMenu from '../../components/VideoReplayMenu.vue'
 import { useArtbookZoomReset } from '../../composables/useArtbookZoomReset'
 import type { ArtbookPage } from '../../data/artbookPages'
-import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
@@ -14,7 +15,8 @@ defineProps<{
 const hasStartedVideo = ref(false)
 const isStartingVideo = ref(false)
 const resetArtbookZoom = useArtbookZoomReset()
-const prefaceVideo = publicAsset('videos/prefaceVideo.mp4')
+// Vidéo gardée ici pour que la page contrôle son propre média.
+const prefaceVideo = '/videos/prefaceVideo.mp4'
 
 async function startVideo() {
   // Lance la vidéo seulement après le clic.

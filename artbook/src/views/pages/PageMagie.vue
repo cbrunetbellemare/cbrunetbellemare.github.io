@@ -1,8 +1,8 @@
 <script setup lang="ts">
+// Page La magie: affiche les versions avec un slider de transition.
 import ArtbookImageVersionPage from '../../components/ArtbookImageVersionPage.vue'
 import type { ImageVersion } from '../../components/ImageVersionMenu.vue'
 import type { ArtbookPage } from '../../data/artbookPages'
-import { publicAsset } from '../../utils/publicPath'
 
 defineProps<{
   page: ArtbookPage
@@ -12,20 +12,21 @@ defineProps<{
 const imageVersions = [
   {
     label: 'Croquis',
-    image: publicAsset('images/pages/magieSketch.jpg'),
+    image: '/images/pages/magieSketch.jpg',
   },
   {
     label: 'Couleur',
-    image: publicAsset('images/pages/magieColor.jpg'),
+    image: '/images/pages/magieColor.jpg',
   },
   {
     label: 'Final',
-    image: publicAsset('images/pages/magie.jpg'),
+    image: '/images/pages/magie.jpg',
   },
 ] satisfies [ImageVersion, ...ImageVersion[]]
 </script>
 
 <template>
+  <!-- Slider: comparer les étapes en fondu. -->
   <ArtbookImageVersionPage
     :page-name="page.name"
     :versions="imageVersions"
