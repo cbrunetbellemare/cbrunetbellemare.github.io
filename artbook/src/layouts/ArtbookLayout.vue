@@ -32,12 +32,15 @@ const shellBackgroundImage = `url("/images/fond.jpg")`
 
 const pageElement = ref<HTMLElement | null>(null)
 const isPagesMenuOpen = ref(false)
+// État du zoom et du déplacement
 const zoomLevel = ref(minZoomLevel)
 const zoomPan = ref(createDefaultPan())
+// Variables pour gérer l'animation du reset smooth
 let smoothResetFrame: number | undefined
 let smoothResetResolve: (() => void) | undefined
 
 const isZoomed = computed(() => zoomLevel.value > minZoomLevel)
+// Trouve la page actuelle et détermine les pages précédentes/suivantes
 const currentPageIndex = computed(() =>
   artbookPages.findIndex((candidate) => candidate.id === props.page.id),
 )
@@ -52,6 +55,7 @@ const nextPage = computed(() =>
     : undefined,
 )
 
+// Réinitialise le zoom quand on change de page
 watch(
   () => props.page.id,
   () => {
@@ -60,9 +64,11 @@ watch(
   },
 )
 
+// Surveille le zoom et le déplacement pour les contraintes
 watch(
   [zoomLevel, () => zoomPan.value.x, () => zoomPan.value.y],
   ([nextZoomLevel]) => {
+    // Réinitialise si on revient au zoom minimal
     if (
       nextZoomLevel <= minZoomLevel &&
       (nextZoomLevel !== minZoomLevel || hasPanOffset(zoomPan.value))
@@ -86,11 +92,13 @@ onBeforeUnmount(() => {
 })
 
 function resetZoom() {
+  // Annule toute animation en cours et réinitialise à l'état par défaut
   cancelSmoothReset()
   zoomLevel.value = minZoomLevel
   zoomPan.value = createDefaultPan()
 }
 
+// Appelée par les enfants pour reset avant vidéo ou changement d'état
 async function resetZoomFromChild(options?: { smooth?: boolean }) {
   if (options?.smooth) {
     await resetZoomSmooth()
@@ -200,22 +208,27 @@ function createDefaultPan(): ZoomPan {
   }
 }
 
+// Vérifie si le déplacement n'est pas à la position par défaut
 function hasPanOffset(pan: ZoomPan) {
   return pan.x !== 0 || pan.y !== 0
 }
 
+// Limite une valeur entre min et max
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
 }
 
+// Interpole linéairement entre deux valeurs
 function interpolate(from: number, to: number, progress: number) {
   return from + (to - from) * progress
 }
 
+// Courbe d'animation ease-out cubic pour les transitions fluides
 function easeOutCubic(progress: number) {
   return 1 - (1 - progress) ** 3
 }
 
+// Navigue vers une page
 function navigateToPage(targetPage: ArtbookPage | undefined) {
   if (!targetPage) {
     return
@@ -239,6 +252,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
       />
 
       <div class="artbook-page-navigation-frame">
+        <!-- Flèche précédente -->
         <button
           class="page-arrow page-arrow--previous artbook-hover-highlight"
           type="button"
@@ -255,6 +269,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
           />
         </button>
 
+        <!-- Contenu zoomable et pannable -->
         <section
           ref="pageElement"
           class="artbook-page"
@@ -282,6 +297,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
           </VueZoomable>
         </section>
 
+        <!-- Flèche suivante -->
         <button
           class="page-arrow page-arrow--next artbook-hover-highlight"
           type="button"
@@ -303,6 +319,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
 </template>
 
 <style scoped>
+/* Conteneur principal avec fond dégradé */
 .artbook-shell {
   --shell-padding-y: clamp(8px, 1.8vh, 28px);
   --shell-padding-x: clamp(10px, 2.2vw, 40px);
@@ -320,16 +337,19 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
   padding: var(--shell-padding-y) var(--shell-padding-x);
 }
 
+/* Conteneur de la page avec ratio 16:9 */
 .artbook-stage {
   width: min(100%, calc((100vh - var(--shell-padding-y) * 2 - var(--top-controls-space)) * 16 / 9));
   max-width: 3840px;
 }
 
+/* Frame pour la navigation entre pages */
 .artbook-page-navigation-frame {
   position: relative;
   width: 100%;
 }
 
+/* Zone d'affichage de la page */
 .artbook-page {
   position: relative;
   width: 100%;
@@ -348,6 +368,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
   cursor: grab;
 }
 
+/* Conteneur pour zoom et déplacement */
 .artbook-zoomable,
 .artbook-zoom-content {
   width: 100%;
@@ -362,6 +383,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
   -webkit-user-drag: none;
 }
 
+/* Flèches de navigation */
 .page-arrow {
   position: absolute;
   top: 50%;
@@ -401,6 +423,7 @@ function navigateToPage(targetPage: ArtbookPage | undefined) {
   height: clamp(26px, 3.6vh, 46px);
 }
 
+/* Responsive: flèches repositionnées sur mobile */
 @media (max-width: 900px) {
   .page-arrow {
     background: rgba(7, 7, 12, 0.66);

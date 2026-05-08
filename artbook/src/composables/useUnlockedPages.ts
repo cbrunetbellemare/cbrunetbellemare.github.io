@@ -7,6 +7,7 @@ const unlockedStorageKey = 'artbook.unlockedPages.v2'
 
 const unlockedPageIds = ref<string[]>(normalizeStoredIds(readStoredIds(unlockedStorageKey)))
 
+// Lit les IDs sauvegardées dans localStorage avec contrôle de validité
 function readStoredIds(key: string) {
   const storedValue = window.localStorage.getItem(key)
 
@@ -16,7 +17,7 @@ function readStoredIds(key: string) {
 
   try {
     const parsedValue: unknown = JSON.parse(storedValue)
-    // localStorage n'est pas fiable: on garde seulement un tableau de strings.
+    // localStorage pas toujours fiable: on garde seulement un tableau de strings.
     return Array.isArray(parsedValue) && parsedValue.every((item) => typeof item === 'string')
       ? parsedValue
       : []
@@ -25,31 +26,39 @@ function readStoredIds(key: string) {
   }
 }
 
+// Sauvegarde les IDs débloquées dans localStorage
 function persistIds(key: string, ids: string[]) {
   window.localStorage.setItem(key, JSON.stringify(ids))
 }
 
+// Ajoute une page aux IDs sans créer de doublons
 function addStoredId(ids: string[], pageId: string) {
   // Évite les doublons dans la sauvegarde.
   return ids.includes(pageId) ? ids : [...ids, pageId]
 }
 
+// Filtre les IDs: enlève la première page et les pages invalides
 function normalizeStoredIds(ids: string[]) {
   // La première page est déjà ouverte au départ.
-  return ids.filter((pageId) => pageId !== firstArtbookPage.id && Boolean(findArtbookPageById(pageId)))
+  return ids.filter(
+    (pageId) => pageId !== firstArtbookPage.id && Boolean(findArtbookPageById(pageId)),
+  )
 }
 
 export function useUnlockedPages() {
-  // Le menu voit toutes les pages, mais pas toutes cliquables.
+  // Liste toutes les pages (pour affichage)
   const allPages = computed(() => artbookPages)
+  // Liste les pages accessibles à l'utilisateur (débloquées)
   const accessiblePages = computed(() => {
     return artbookPages.filter((page) => isPageAccessible(page.id))
   })
 
+  // Vérifie si une page est accessible (débloquée ou première page)
   function isPageAccessible(pageId: string) {
     return pageId === firstArtbookPage.id || unlockedPageIds.value.includes(pageId)
   }
 
+  // Déverrouille une page et la sauvegarde
   function unlockPage(pageId: string) {
     if (pageId === firstArtbookPage.id || !findArtbookPageById(pageId)) {
       return
@@ -60,6 +69,7 @@ export function useUnlockedPages() {
     persistIds(unlockedStorageKey, unlockedPageIds.value)
   }
 
+  // Déverrouille la page suivante automatiquement quand une page est lue
   function unlockNextPage(currentPageId: string) {
     const currentPage = findArtbookPageById(currentPageId)
 
@@ -69,8 +79,8 @@ export function useUnlockedPages() {
     }
   }
 
+  // Déverrouille toutes les pages
   function unlockAllPages() {
-    // Bouton pour tout débloquer.
     unlockedPageIds.value = artbookPages
       .filter((page) => page.id !== firstArtbookPage.id)
       .map((page) => page.id)

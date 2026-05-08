@@ -1,4 +1,3 @@
-// Petit routeur maison: suffisant pour cet artbook sans installer Vue Router.
 import { ref } from 'vue'
 
 const currentPath = ref(normalizePath(window.location.pathname))
@@ -14,7 +13,6 @@ function normalizePath(path: string) {
 }
 
 function toBrowserPath(path: string) {
-  // Le navigateur a besoin d'un slash au début de l'adresse.
   return path.startsWith('/') ? path : `/${path}`
 }
 

@@ -21,8 +21,7 @@
   --artbook-menu-item-bg-hover: rgba(var(--artbook-gold-rgb), 0.22);
   --artbook-menu-item-bg-active: rgba(var(--artbook-gold-rgb), 0.28);
   --artbook-panel-shadow:
-    0 14px 42px rgba(0, 0, 0, 0.46),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    0 14px 42px rgba(0, 0, 0, 0.46), inset 0 0 0 1px rgba(255, 255, 255, 0.07);
   --artbook-active-glow: 0 0 18px rgba(var(--artbook-gold-rgb), 0.45);
 }
 
@@ -78,7 +77,6 @@ button {
 }
 
 .artbook-hover-highlight::before {
-  /* Overlay au survol sans changer le fond original du bouton. */
   position: absolute;
   inset: 0;
   border-radius: inherit;
