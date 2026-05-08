@@ -1,4 +1,4 @@
-name: Deploy Firaluna to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -32,13 +32,18 @@ jobs:
           cache: 'npm'
 
       - name: Installer les dependances
-        run: npm ci
+        run: |
+          cd artbook
+          npm ci
 
       - name: Construire le site
-        run: npm run build
+        run: |
+          cd artbook
+          npm run build
 
       - name: Preparer GitHub Pages
         run: |
+          cd artbook
           touch dist/.nojekyll
           cp dist/index.html dist/404.html
 
@@ -48,7 +53,7 @@ jobs:
       - name: Envoyer le site construit
         uses: actions/upload-pages-artifact@v5
         with:
-          path: './dist'
+          path: artbook/dist
 
       - name: Publier sur GitHub Pages
         id: deployment

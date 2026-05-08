@@ -7,7 +7,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // Le site est prevu pour etre publie a la racine GitHub Pages: https://firaluna.github.io/.
+  // Le site est prevu pour etre publie a la racine GitHub Pages: https://cbrunetbellemare.github.io/.
   base: '/',
   plugins: [
     vue(),
